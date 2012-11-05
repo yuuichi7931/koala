@@ -1,0 +1,33 @@
+<div id="reviews" class="row">
+  <h3>レビュー</h3>
+
+  <% if reviews %>
+    <table class="table table-bordered table-striped" id="reviews">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th><i class="icon-star"></i></th>
+          <th>user名</th>
+          <th>日付</th>
+          <th>Version</th>
+          <th>レビュー</th>
+          <th>端末</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% reviews.order(:id.desc).each do |review| %>
+          <tr>
+            <td><%= review[:id] %></td>
+            <td><%= review[:star] %></td>
+            <td><%= review[:user] %></td>
+            <td><%= formatted_date review[:date] %></td>
+            <td><%= review[:version] %></td>
+            <td><h5><%= review[:title] %></h5><%= add_wbr(review[:body]) %></td>
+            <td><%= review[:device] %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>

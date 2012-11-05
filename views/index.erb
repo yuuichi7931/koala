@@ -1,0 +1,80 @@
+        <script type="text/javascript" src="/js/jquery.form.js"></script>
+        <script type="text/javascript" src="/js/star_graph.js"></script>
+        <script type="text/javascript">
+        <!--
+        $(function() {
+            $("table#reviews").tablesorter({ sortList: [[3,1]] });
+
+            var form_option = {
+              success: function() {
+                  $('#add_app_form').toggle();
+                  document.location.reload(true);
+              },
+              error: function() {
+                  alert('error');
+              }
+            }; 
+            $('#add_app').ajaxForm(form_option);
+            $('#toggle_app_form').click(function(){
+                $('#add_app_form').toggle();
+            });
+
+            var graph_data = [
+                {value: <%= @stars[4] %>},
+                {value: <%= @stars[3] %>},
+                {value: <%= @stars[2] %>},
+                {value: <%= @stars[1] %>},
+                {value: <%= @stars[0] %>}
+            ];
+            render_graph(graph_data);
+        });
+        -->
+        </script>
+        <% if @app %>
+        <title>App Reviews - <%= @app[:name] %></title>
+        <% else %>
+        <title>App Reviews</title>
+        <% end %>
+    </head>
+    <body>
+        <div class="navbar navbar-fixed-top"> 
+            <div class="navbar-inner"> 
+                    <a href="/" class="brand">App Reviews</a>
+                    <div class="nav-collapse"></div>
+            </div> 
+        </div> 
+
+
+        <div class="container-fluid span12">
+
+            <!-- menu -->
+            <div class="span3">
+                &nbsp;
+                <div class="float-menu">
+              <%= partial(:_side_menu, :selected_app => @app, :apps => @apps) %>
+              <% if @app %>
+                  <%= partial(:_query_panel, :version => @version, :versions => @versions, :app_id => @app[:app_id]) %>
+              <% end %>
+                </div>
+            </div>
+
+            <!-- content -->
+            <div class="span8">
+                <div class="container">
+                    <% if @app %>
+                      <div class="row">
+                        <h1><%= @app[:name] %>のレビュー<%if @version %> [Version: <%= @version %>]<% end %></h1>
+                      </div>
+
+                      <%= partial(:_star_panel, :stars => @stars) %>
+
+                      <%= partial(:_keyword_panel, :keywords => @keywords) %>
+
+                      <%= partial(:_review_table, :reviews => @reviews) %>
+
+                    <% else %>
+                      アプリが登録されていません
+                    <% end %>
+                </div> 
+        </div> 
+    </body>

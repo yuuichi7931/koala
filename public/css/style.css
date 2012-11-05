@@ -1,0 +1,94 @@
+body {
+    padding-top: 40px;
+}
+
+.keyword-span1 {
+    font-size: 40px;
+    line-height: 36px;
+    float:none;
+}
+
+.keyword-span2 {
+    font-size: 30px;
+    line-height: 36px;
+    float:none;
+}
+
+.keyword-span3 {
+    font-size: 25px;
+    line-height: 36px;
+    float:none;
+}
+
+.keyword-span4 {
+    font-size: 20px;
+    line-height: 36px;
+    float:none;
+}
+
+.keyword-span5 {
+    font-size: 15px;
+    line-height: 36px;
+    float:none;
+}
+
+.keyword-span6 {
+    font-size: 12px;
+    line-height: 36px;
+    float:none;
+}
+
+.table th {
+    font-size: 12px;
+}
+
+.table tr td {
+    font-weigtht: lighter;
+    font-size: 12px;
+}
+
+.side-content {
+    padding-bottom: 20px;
+    padding-left: 30px;
+}
+
+.navbar .brand {
+    padding-left: 73px;
+}
+
+.float-menu {
+    position:fixed;
+    top:40px;
+    left:30;
+    z-index:1;
+}
+
+#evaluation_graph {
+    width: 600px;
+    height: 60px;
+    margin-bottom: 20px;
+}
+
+#evaluation_graph div.cell {
+    height: 60px;
+    display: inline-block;
+    /display: inline;
+    /zoom: 1;
+}
+
+#evaluation_graph_caption div.caption {
+    display: inline-block;
+    /display: inline;
+    /vertical-align: middle;
+    /zoom: 1;
+}
+
+#evaluation_graph_caption div.caption span {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    /display: inline;
+    /vertical-align: middle;
+    /zoom: 1;
+}
+

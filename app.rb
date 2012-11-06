@@ -110,7 +110,7 @@ get '/ranking' do
   end
 
   @genres.each do |k, v|
-    v[:share] = (v[:count].to_f / total_count.to_f) * 100.0
+    v[:share] = (v[:count].to_f / total_count.to_f)
   end
 
   @date_list = RankingRecords.dates

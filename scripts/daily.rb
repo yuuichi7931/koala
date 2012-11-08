@@ -22,7 +22,6 @@ require 'model/reviews'
 require 'model/ranking_apps'
 require 'model/ranking_records'
 require 'app_ranking'
-require 'ranking_app_info'
 
 task = AppRanking.new
 task.fetch

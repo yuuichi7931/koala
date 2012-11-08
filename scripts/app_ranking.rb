@@ -11,7 +11,7 @@ class AppRanking
 
   def fetch
     fetch_apple_ranking
-    #fetch_google_ranking
+    fetch_google_ranking
   end
 
   def fetch_apple_ranking

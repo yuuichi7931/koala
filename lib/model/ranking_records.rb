@@ -24,6 +24,6 @@ class RankingRecords < Sequel::Model
   end
 
   def self.dates
-    self.db.fetch("SELECT DISTINCT date FROM ranking_records ORDER BY date")
+    self.db.fetch("SELECT DISTINCT date FROM ranking_records ORDER BY date DESC")
   end
 end

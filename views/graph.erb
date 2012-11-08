@@ -104,7 +104,7 @@
             <div class="span3">
                 &nbsp;
                 <div class="float-menu">
-              <%= partial(:_side_menu, :selected_app => @app, :apps => @apps) %>
+                  <%= partial(:_side_menu, :selected_app => @app, :apps => @apps, :app_store_genres => @app_store_genres) %>
               <% if @app %>
                   <%= partial(:_query_panel, :version => @version, :versions => @versions, :app_id => @app[:app_id]) %>
               <% end %>
@@ -116,9 +116,29 @@
                 <div class="container">
                     <% if @records && 0< @records.count%>
                       <div class="row">
-                        <h1><%= @app[:name] %> </h1>
-                        <img src="<%= @app[:thumbnail] %>" />
                       </div>
+
+                      <div class="row-fluid" style="margin-top:20px">
+                        <div class="span2">
+                          <img src="<%= @app[:thumbnail] %>" />
+                        </div>
+                        <div class="span9">
+                          <h1><%= @app[:name] %> </h1>
+                          <% if @genre_id %><h3> ジャンル: <%= @genre_name %>でのランキング</h3><% end %>
+
+                          <% if @store_type.to_i==0 %>
+                            <% if @genre_id==nil %>
+                              <% genre = get_genre(@app) %>
+                              <% if genre %>
+                                <a href="/graph?app_id=<%= @app[:app_id] %>&genre_id=<%= genre[:id] %>">ジャンル:<%= genre[:name] %>でのランキング遷移</a>
+                              <% end %>
+                            <% else %>
+                                <a href="/graph?app_id=<%= @app[:app_id] %>">総合でのランキング遷移</a>
+                            <% end %>
+                          <% end %>
+                        </div>
+                      </div>
+
 
                       <svg id="graph">
 

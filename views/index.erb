@@ -51,7 +51,7 @@
             <div class="span3">
                 &nbsp;
                 <div class="float-menu">
-              <%= partial(:_side_menu, :selected_app => @app, :apps => @apps) %>
+                  <%= partial(:_side_menu, :selected_app => @app, :apps => @apps, :app_store_genres => @app_store_genres) %>
               <% if @app %>
                   <%= partial(:_query_panel, :version => @version, :versions => @versions, :app_id => @app[:app_id]) %>
               <% end %>

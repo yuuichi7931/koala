@@ -15,11 +15,14 @@ Sequel.connect(db)
 
 $LOAD_PATH << File.dirname(__FILE__)
 $LOAD_PATH << File.dirname(__FILE__) + '/../lib'
+$LOAD_PATH << File.dirname(__FILE__) + '/../config'
+require 'app_config'
 require 'model/apps'
 require 'model/reviews'
 require 'model/ranking_apps'
 require 'model/ranking_records'
 require 'app_ranking'
+require 'ranking_app_info'
 
 task = AppRanking.new
 task.fetch

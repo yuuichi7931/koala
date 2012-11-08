@@ -23,4 +23,12 @@ class RankingApps < Sequel::Model
     super
     validates_presence [:app_id, :name]
   end
+
+  def self.no_genres
+    query = 'SELECT  DISTINCT(ranking_apps.app_id) FROM ranking_apps'
+    query += ' LEFT JOIN ranking_records'
+    query += ' ON ranking_apps.app_id = ranking_records.app_id'
+    query += ' WHERE ( (store_type = 1) AND (ranking_apps.genre IS NULL))'
+    self.db.fetch(query)
+  end
 end

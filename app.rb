@@ -37,10 +37,25 @@ helpers do
     end
     return formatted_string_array.join("<br />")
   end
+
+  def get_genre(app)
+    @app_store_genres.each do |genre|
+      if genre[:name]==app[:genre]
+        return genre
+      end
+    end
+    return nil
+  end
+end
+
+before do
+  @apps = Apps.all
+  @app_store_genres = AppConfig::APP_STORE_RANKING_GENRES
+  @genre_id = params[:genre_id]
+  @genre_name = _get_genre_name(params[:genre_id])
 end
 
 get '/' do
-  @apps = Apps.all
   @app  = nil
 
   if params[:app_id]
@@ -86,15 +101,25 @@ end
 get '/ranking' do
   params[:store_type] = 0 unless params[:store_type]
   @store_type = params[:store_type]
+  @date_list = RankingRecords.dates
+
   unless params[:date]
-    now = Time.now
-    params[:date] = now.year.to_s + '-' + now.month.to_s + '-' + now.day.to_s
+    latest_time = @date_list.first[:date]
+    params[:date] = latest_time.strftime("%Y-%m-%d")
   end
   @date = params[:date]
 
-  @records = RankingRecords.filter(:store_type => params[:store_type],
-                                   :date => Time.parse(params[:date]))\
-                                   .join_table(:left, :ranking_apps___app, [:app_id]).order(:rank)
+  if @genre_id
+    @records = RankingRecords.filter(:store_type => params[:store_type],
+                                     :date => Time.parse(params[:date]),
+                                     :ranking_records__genre => @genre_id)\
+                                     .join_table(:left, :ranking_apps___app, [:app_id]).order(:rank)
+  else
+    @records = RankingRecords.filter(:store_type => params[:store_type],
+                                     :date => Time.parse(params[:date]),
+                                     :ranking_records__genre => nil)\
+                                     .join_table(:left, :ranking_apps___app, [:app_id]).order(:rank)
+  end
 
   @genres = {}
   total_count = 0
@@ -113,9 +138,6 @@ get '/ranking' do
     v[:share] = (v[:count].to_f / total_count.to_f)
   end
 
-  @date_list = RankingRecords.dates
-  @apps = Apps.all
-
   erb :ranking
 end
 
@@ -126,10 +148,14 @@ get '/graph' do
     return 'not found'
   end
 
-  @records = RankingRecords.filter(:app_id => params[:app_id])\
-    .join_table(:left, :ranking_apps___app, [:app_id]).order(:rank)
+  if @genre_id
+    @records = RankingRecords.filter(:app_id => params[:app_id], :ranking_records__genre => @genre_id)\
+      .join_table(:left, :ranking_apps___app, [:app_id]).order(Sequel.desc(:date))
+  else
+    @records = RankingRecords.filter(:app_id => params[:app_id], :ranking_records__genre => nil)\
+      .join_table(:left, :ranking_apps___app, [:app_id]).order(Sequel.desc(:date))
+  end
 
-  @apps = Apps.all
   erb :graph
 end
 
@@ -178,4 +204,13 @@ def _get_keywords(reviews=[])
     end
   end
   return keywords.sort_by{|key, value| -value}
+end
+
+def _get_genre_name(genre_id)
+  @app_store_genres.each do |genre|
+    if genre[:id]==genre_id
+      return genre[:name]
+    end
+  end
+  return ''
 end

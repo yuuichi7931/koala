@@ -67,4 +67,36 @@ class GooglePlayRanking < AbstractRanking
       return app
   end
 
+  def fetch_genres
+    apps = RankingApps.no_genres
+    apps.each do |app|
+      html = croll_app(app[:app_id])
+      target = RankingApps.filter(:app_id => app[:app_id]).first
+      target[:genre] = get_genre(html)
+      target.save
+    end
+  end
+
+  def croll_app(app_id)
+    url = "https://play.google.com/store/apps/details?id=#{app_id}"
+    html = open(url).read
+    return html
+  end
+
+  def get_genre(html)
+    genre = ''
+    doc = Nokogiri.HTML(html)
+    find_category_flag = 0
+    doc.xpath('//dl[@class="doc-metadata-list"]')[0].children.each do |child|
+      if find_category_flag == 1
+        genre = child.content
+        break
+      end
+
+      find_category_flag = 1 if child.content=='カテゴリ:'
+    end
+
+    return genre
+  end
+
 end

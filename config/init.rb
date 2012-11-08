@@ -24,6 +24,9 @@ configure :production do
   @log.level = Logger::FATAL
 end
 
+$LOAD_PATH << File.dirname(__FILE__) + '/../config'
+require 'app_config'
+
 $LOAD_PATH << File.dirname(__FILE__) + '/../lib'
 require 'model/apps'
 require 'model/reviews'

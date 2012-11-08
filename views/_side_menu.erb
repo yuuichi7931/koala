@@ -3,6 +3,11 @@
     <h3>ランキング</h3>
     <ul class="nav nav-pills nav-stacked span2">
       <li><a href="/ranking?store_type=0">App Store</a></li>
+      <% if app_store_genres %>
+      <% app_store_genres.each do |genre| %>
+        <li><a href="/ranking?store_type=0&genre_id=<%= genre[:id] %>">App Store(<%= genre[:name] %>)</a></li>
+      <% end%>
+      <% end%>
       <li><a href="/ranking?store_type=1">Google play</a></li>
     </ul>
   </div>

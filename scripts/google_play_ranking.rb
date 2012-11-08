@@ -71,6 +71,8 @@ class GooglePlayRanking < AbstractRanking
     apps = RankingApps.no_genres
     apps.each do |app|
       html = croll_app(app[:app_id])
+      next unless html
+
       target = RankingApps.filter(:app_id => app[:app_id]).first
       target[:genre] = get_genre(html)
       target.save
@@ -79,8 +81,12 @@ class GooglePlayRanking < AbstractRanking
 
   def croll_app(app_id)
     url = "https://play.google.com/store/apps/details?id=#{app_id}"
-    html = open(url).read
-    return html
+    begin
+      html = open(url).read
+      return html
+    rescue OpenURI::HTTPError
+      return nil
+    end
   end
 
   def get_genre(html)

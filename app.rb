@@ -101,7 +101,8 @@ end
 get '/ranking' do
   params[:store_type] = 0 unless params[:store_type]
   @store_type = params[:store_type]
-  @date_list = RankingRecords.dates
+  @date_list = RankingRecords.dates(@genre_id)
+  p @date_list
 
   unless params[:date]
     latest_time = @date_list.first[:date]

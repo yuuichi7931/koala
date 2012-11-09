@@ -23,7 +23,11 @@ class RankingRecords < Sequel::Model
     validates_presence [:rank, :app_id]
   end
 
-  def self.dates
-    self.db.fetch("SELECT DISTINCT date FROM ranking_records ORDER BY date DESC")
+  def self.dates(genre_id)
+    if genre_id
+      self.db.fetch("SELECT DISTINCT date FROM ranking_records WHERE genre = ? ORDER BY date DESC", genre_id)
+    else
+      self.db.fetch("SELECT DISTINCT date FROM ranking_records ORDER BY date DESC")
+    end
   end
 end

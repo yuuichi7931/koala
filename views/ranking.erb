@@ -197,17 +197,24 @@
                         <% end %>
                       </div>
 
-                      <div class="btn-toolbar">
+
+
                       <div class="btn-group">
-                        <button class="btn btn-small">日付を選択</button>
-                        <button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                          日付を選択
+                          <span class="caret"></span>
+                        </a>
                         <ul class="dropdown-menu">
                           <% @date_list.each do |record| %>
-                            <li><a href="?store_type=<%= @store_type %>&date=<%= formatted_date(record[:date], '-') %>"><%= formatted_date(record[:date], '-') %></a></li>
+                            <% if @genre_id %>
+                              <li><a href="?store_type=<%= @store_type %>&date=<%= formatted_date(record[:date], '-') %>&genre_id=<%= @genre_id %>"><%= formatted_date(record[:date], '-') %></a></li>
+                            <% else %>
+                              <li><a href="?store_type=<%= @store_type %>&date=<%= formatted_date(record[:date], '-') %>"><%= formatted_date(record[:date], '-') %></a></li>
+                            <% end %>
                           <% end %>
                         </ul>
                       </div>
-                      </div>
+
 
                       <svg id="genres" width="0px" height="0px"/>
 

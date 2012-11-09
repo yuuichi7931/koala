@@ -10,7 +10,7 @@
           <th>app_id</th>
           <th>ジャンル</th>
           <th>評価</th>
-          <th>統計</th>
+          <th>Store</th>
         </tr>
       </thead>
 
@@ -19,16 +19,16 @@
           <tr>
             <td><%= record[:rank] %></td>
             <td><img width="25" src="<%= record[:thumbnail] %>" />
-              <a href="<%= record[:url] %>" target="_blank"><%= record[:name] %></a></td>
+            <% if genre_id %>
+            <td><a href="/graph?app_id=<%= record[:app_id] %>&genre_id=<%= genre_id %>"><%= record[:name] %></i></a></td>
+            <% else %>
+              <a href="/graph?app_id=<%= record[:app_id] %>"><%= record[:name] %></a></td>
+            <% end %>
             <td><%= record[:developer] %></td>
             <td><%= record[:app_id] %></td>
             <td><%= record[:genre] %></td>
             <td><%= formatted_rate(record[:rating]) %></td>
-            <% if genre_id %>
-            <td><a href="/graph?app_id=<%= record[:app_id] %>&genre_id=<%= genre_id %>"><i class="icon-signal"></i></a></td>
-            <% else %>
-            <td><a href="/graph?app_id=<%= record[:app_id] %>"><i class="icon-signal"></i></a></td>
-            <% end %>
+            <td><a href="<%= record[:url] %>" target="_blank"><i class="icon-home"></i></a></td>
           </tr>
         <% end %>
       </tbody>

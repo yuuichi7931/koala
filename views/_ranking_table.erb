@@ -20,7 +20,7 @@
             <td><%= record[:rank] %></td>
             <td><img width="25" src="<%= record[:thumbnail] %>" />
             <% if genre_id %>
-            <td><a href="/graph?app_id=<%= record[:app_id] %>&genre_id=<%= genre_id %>"><%= record[:name] %></i></a></td>
+            <a href="/graph?app_id=<%= record[:app_id] %>&genre_id=<%= genre_id %>"><%= record[:name] %></i></a>
             <% else %>
               <a href="/graph?app_id=<%= record[:app_id] %>"><%= record[:name] %></a></td>
             <% end %>

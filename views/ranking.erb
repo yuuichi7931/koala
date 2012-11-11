@@ -37,9 +37,11 @@
           <% else %>
             {"State":"Google Play", 
           <% end %>
+          <% if @genres %>
               <% @genres.sort.each do |key, value| %>
                   "<%= key %>": <%= value[:count] %>, 
                 <% end %>
+          <% end %>
               },
           ];
 

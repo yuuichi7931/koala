@@ -101,22 +101,23 @@ end
 get '/ranking' do
   params[:store_type] = 0 unless params[:store_type]
   @store_type = params[:store_type]
-  @date_list = RankingRecords.dates(@genre_id)
-
-  unless params[:date]
-    latest_time = @date_list.first[:date]
-    params[:date] = latest_time.strftime("%Y-%m-%d")
-  end
   @date = params[:date]
+  @date_list = RankingRecords.dates(@genre_id)
+  return erb :ranking unless @date_list.first
+
+  unless @date
+    latest_time = @date_list.first[:date]
+    @date = latest_time.strftime("%Y-%m-%d")
+  end
 
   if @genre_id
-    @records = RankingRecords.filter(:store_type => params[:store_type],
-                                     :date => Time.parse(params[:date]),
+    @records = RankingRecords.filter(:store_type => @store_type,
+                                     :date => Time.parse(@date),
                                      :ranking_records__genre => @genre_id)\
                                      .join_table(:left, :ranking_apps___app, [:app_id]).order(:rank)
   else
-    @records = RankingRecords.filter(:store_type => params[:store_type],
-                                     :date => Time.parse(params[:date]),
+    @records = RankingRecords.filter(:store_type => @store_type,
+                                     :date => Time.parse(@date),
                                      :ranking_records__genre => nil)\
                                      .join_table(:left, :ranking_apps___app, [:app_id]).order(:rank)
   end

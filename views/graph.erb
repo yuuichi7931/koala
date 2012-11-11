@@ -87,7 +87,7 @@
         });
         -->
         </script>
-        <title>koala - <%= @app[:name] %></title>
+        <title>koala - <%= (@app)?@app[:name]:'' %></title>
     </head>
     <body>
         <div class="navbar navbar-fixed-top"> 

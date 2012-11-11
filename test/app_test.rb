@@ -19,6 +19,21 @@ class AppTest < Test::Unit::TestCase
     assert_equal 200, last_response.status
   end
 
+  def test_default_ranking
+    get '/ranking'
+    assert_equal 200, last_response.status
+  end
+
+  def test_default_graph
+    get '/graph'
+    assert_equal 200, last_response.status
+  end
+
+  def test_some_graph
+    get '/graph', :app_id => 'hoge'
+    assert_equal 200, last_response.status
+  end
+
   def test_with_params
     get '/meet', :name => 'Frank'
     assert_equal 404, last_response.status

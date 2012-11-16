@@ -27,29 +27,37 @@ class GooglePlayReview < AbstractReview
     i = 0
 
     doc = Nokogiri.HTML(html)
-    doc.xpath("//h4[@class='review-title']").each do |node|
-      titles.push(node.text)
-    end
-
-    doc.xpath("//p[@class='review-text']").each do |node|
-      bodies.push(node.text)
-    end
-
-    doc.xpath("//span[@class='doc-review-date']").each do |node|
-      dates.push(node.text.sub(' - ', ''))
-    end
-
-    doc.xpath("//div[@class='ratings goog-inline-block']").each do |node|
-      stars.push(node.attributes['title'].value)
-    end
-
-    doc.xpath("//strong").each do |node|
-      users.push(node.text)
-    end
 
     doc.xpath("//div[@class='doc-review']").each do |node|
-      versions.push(get_version(node.inner_html))
-      devices.push(get_device(node.inner_html))
+      node.xpath(".//h4[@class='review-title']").each do |title_node|
+        titles.push(title_node.text)
+      end
+
+      body_node = node.xpath(".//p[@class='review-text']")
+      if 0<body_node.count
+        body_node.each do |body_node|
+          bodies.push(body_node.text)
+        end
+      else
+        bodies.push("")
+      end
+
+      node.xpath(".//span[@class='doc-review-date']").each do |date_node|
+        dates.push(date_node.text.sub(' - ', ''))
+      end
+
+      node.xpath(".//div[@class='ratings goog-inline-block']").each do |star_node|
+        stars.push(star_node.attributes['title'].value)
+      end
+
+      node.xpath("//strong").each do |user_node|
+        users.push(user_node.text)
+      end
+
+      node.xpath("//div[@class='doc-review']").each do |info_node|
+        versions.push(get_version(info_node.inner_html))
+        devices.push(get_device(info_node.inner_html))
+      end
     end
 
     items = [];

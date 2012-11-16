@@ -75,4 +75,31 @@ class GooglePlayReviewTest < Test::Unit::TestCase
     assert_equal('SEMC Xperia Arco', @obj.get_device(text))
   end
 
+  def test_get_reviews_2012_11
+    f = open(File.dirname(__FILE__) + '/reviews/gp_review_2012_11_16.txt')
+    data = f.read
+    reviews = @obj.get_reviews(data, 'com.twitter.android')
+    expect0 = {:star=>"評価: 星 1.0 個（あまり良くない）",
+      :user=>"TEST_USER1",
+      :date=>"2012/11/16",
+      :title=>"設定できない",
+      :body=> "ログインしたら、同期、ショートカット、使い方が出てきてうっとうしい。ツイッター臨機応変チェックを使うときだけ入れたい。これらを設定する画面がなく、毎回困っている。これならiPhone系の方が優位。",
+      :version=>"5.3.0",
+      :device=>nil,
+      :app_id=>"com.twitter.android"}
+
+    expect1 = {:star=>"評価: 星 4.0 個（良い）",
+      :user=>"TEST_USER2",
+      :date=>"2012/11/15",
+      :title=>"あ",
+      :body=> "",
+      :version=>"5.3.0",
+      :device=> nil,
+      :app_id=>"com.twitter.android"}
+
+    assert_equal(10, reviews.size)
+    assert_equal(expect0, reviews[3])
+    assert_equal(expect1, reviews[4])
+  end
+
 end

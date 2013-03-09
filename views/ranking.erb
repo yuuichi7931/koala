@@ -14,7 +14,7 @@
 
           .bar {
           fill: steelblue;
-          fill-opacity: .9;
+          fill-opacity: .8;
           }
 
           .x.axis path {
@@ -38,16 +38,16 @@
             {"State":"Google Play", 
           <% end %>
           <% if @genres %>
-              <% @genres.sort.each do |key, value| %>
-                  "<%= key %>": <%= value[:count] %>, 
-                <% end %>
+            <% @genres.sort_by{|key, value| -value}.each do|key, value| %>
+                "<%= key %>": <%= value %>, 
+              <% end %>
           <% end %>
               },
           ];
 
           var margin = {top: 20, right: 20, bottom: 30, left: 40};
-          var width = 960 - margin.left - margin.right;
-          var height = 600 - margin.top - margin.bottom;
+          var width = 760 - margin.left - margin.right;
+          var height = 500 - margin.top - margin.bottom;
 
           var x0 = d3.scale.ordinal()
           .rangeRoundBands([0, width], .1);
@@ -100,7 +100,7 @@
             .attr("y", 6)
             .attr("dy", ".71em")
             .style("text-anchor", "end")
-            .text("Population");
+            .text("Count");
 
           var state = svg.selectAll(".state")
             .data(data)
@@ -118,23 +118,24 @@
             .style("fill", function(d) { return color(d.name); });
 
           var legend = svg.selectAll(".legend")
-            .data(ageNames.slice().reverse())
+            .data(ageNames.slice())
             .enter().append("g")
             .attr("class", "legend")
-            .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+            .attr("transform", function(d, i) { return "translate(0," + i * 16 + ")"; });
 
           legend.append("rect")
-            .attr("x", width - 18)
-            .attr("width", 18)
-            .attr("height", 18)
+            .attr("x", width - 12)
+            .attr("width", 12)
+            .attr("height", 12)
             .style("fill", color);
 
           legend.append("text")
-            .attr("x", width - 24)
-            .attr("y", 9)
-            .attr("dy", ".35em")
+            .attr("x", width - 15)
+            .attr("y", 10)
+            .attr("dy", ".2em")
             .style("text-anchor", "end")
             .text(function(d) { return d; });
+
         }
 
         $(function() {

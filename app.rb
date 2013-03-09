@@ -146,6 +146,10 @@ get '/graph' do
     return 'not found'
   end
 
+  if @app==nil
+    return 'not found'
+  end
+
   if @genre_id
     @records = RankingRecords.filter(:app_id => params[:app_id], :ranking_records__genre => @genre_id)\
       .join_table(:left, :ranking_apps___app, [:app_id]).order(Sequel.desc(:date))

@@ -3,32 +3,88 @@
         <script type="text/javascript" src="/js/d3.v2.min.js"></script>
         <script type="text/javascript">
         <!--
-        // GLOBAL VARIABLE!!!
-        var dataset = {
-               category_name: 'appli',
-               chart_name:    'Ranking',
-               end_date:      '2013-01-17',
-               start_date:    '2012-10-19',
-               <% if @genre_id %>
-               data_url:      'http://'+location.hostname+':'+location.port+'/csv?app_id=<%= @app[:app_id] %>&genre_id=<%= @genre_id %>',
-               <% else %>
-               data_url:      'http://'+location.hostname+':'+location.port+'/csv?app_id=<%= @app[:app_id] %>',
-               <% end %>
-               x_axis_value_label: 'Date', // 例: "Date"
-               y_series_labels:    ["Date", "Name", "Count"] || [], // 例: ["Date", "Gender", "Device", "UU"]
-               chart_type: 'line',
-               value_type: 'number',
-               display_series_type: 'not_total' || 'not_total',
+        $(function() {
+            var margin = {top: 20, right: 50, bottom: 50, left: 50},
+            width = 960 - margin.left - margin.right,
+            height = 200 - margin.top - margin.bottom;
 
-               column_a_type: 'Count' || '', // 例: Gender
-               column_a_values: ["Rank"] || [], // 例: ["Male", "Female"] or []
-               column_b_type: '' || '',
-               column_b_values: [] || [],
-               cur_column_a: 'Rank' || '', // 例: 'Female'
-               cur_column_b: '' || '',
-               cur_forcused_column_index: '' || '',
-               cur_forcused_column_type: '' || '',
-        };
+            var parseDate = d3.time.format("%Y-%m-%d").parse;
+
+            var x = d3.time.scale()
+            .range([0, width]);
+
+            var y = d3.scale.linear()
+            .range([height, 0]);
+
+            var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom");
+
+            var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left");
+
+            var line = d3.svg.line()
+              .x(function(d) { return x(d.date); })
+              .y(function(d) { return y(d.rank); });
+
+            var svg = d3.select('#graph')
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
+              .append("g")
+              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            data = [
+                <% @records.each do |r| %>
+                    {"date":"<%= formatted_date(r[:date], '-') %>", "rank": <%= r[:rank] %> },
+                <% end %>
+            ];
+            data.forEach(function(d) {
+                d.date = parseDate(d.date);
+                d.rank = +d.rank;
+                });
+
+            x.domain(d3.extent(data, function(d) { return d.date; }));
+            y.domain(d3.extent(data, function(d) { return d.rank; }));
+
+            svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + height + ")")
+              .call(xAxis);
+
+            svg.append("g")
+              .attr("class", "y axis")
+              .call(yAxis)
+              .append("text")
+              .attr("transform", "rotate(-90)")
+              .attr("y", 6)
+              .attr("dy", ".71em")
+              .style("text-anchor", "end")
+              .text("順位");
+
+            svg.append("path")
+              .datum(data)
+              .attr("class", "line")
+              .attr("d", line);
+
+
+
+            $("table#reviews").tablesorter({ sortList: [[3,1]] });
+
+            var form_option = {
+              success: function() {
+                  $('#add_app_form').toggle();
+                  document.location.reload(true);
+              },
+              error: function() {
+                  alert('error');
+              }
+            }; 
+            $('#add_app').ajaxForm(form_option);
+            $('#toggle_app_form').click(function(){
+                $('#add_app_form').toggle();
+            });
+        });
         -->
         </script>
         <title>koala - <%= (@app)?@app[:name]:'' %></title>

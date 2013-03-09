@@ -1,6 +1,13 @@
         <link href="/css/graph.css" rel="stylesheet" type="text/css" />
+
+  
+        <link href="/css/d3.css" rel="stylesheet" type="text/css" />
         <script type="text/javascript" src="/js/jquery.form.js"></script>
+        <script type="text/javascript" src="/js/jquery.date_input.js"></script>
         <script type="text/javascript" src="/js/d3.v2.min.js"></script>
+        <script type="text/javascript" src="/js/nv.d3.js"></script>
+        <script type="text/javascript" src="/js/sortable_ja.js"></script>
+
         <script type="text/javascript">
         <!--
         // GLOBAL VARIABLE!!!
@@ -84,7 +91,9 @@
                       </div>
 
 
-                      <svg id="graph">
+                      <div id="chart">
+                          <svg style="width: 760px; height: 300px"></svg>
+                      </div>
 
                       <%= partial(:_app_ranking_table, :records => @records) %>
                     <% else %>
@@ -92,4 +101,31 @@
                     <% end %>
                 </div> 
         </div> 
+
+      <script src="/js/chart.js" type="text/javascript"></script>
+      <script src="/js/chart_template.js" type="text/javascript"></script>
+        <script type="text/javascript">
+        <!--
+        $(function() {
+            $("table#reviews").tablesorter({ sortList: [[3,1]] });
+
+            var form_option = {
+              success: function() {
+                  $('#add_app_form').toggle();
+                  document.location.reload(true);
+              },
+              error: function() {
+                  alert('error');
+              }
+            }; 
+            $('#add_app').ajaxForm(form_option);
+            $('#toggle_app_form').click(function(){
+                $('#add_app_form').toggle();
+            });
+
+            // GRAPH
+            draw_graph(dataset);
+        });
+        -->
+        </script>
     </body>

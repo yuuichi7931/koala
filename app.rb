@@ -164,6 +164,24 @@ get '/graph' do
   erb :graph
 end
 
+get '/csv' do
+  if @genre_id
+    @records = RankingRecords.filter(:app_id => params[:app_id], :ranking_records__genre => @genre_id)\
+      .join_table(:left, :ranking_apps___app, [:app_id]).order(Sequel.desc(:date))
+  else
+    @records = RankingRecords.filter(:app_id => params[:app_id], :ranking_records__genre => nil)\
+      .join_table(:left, :ranking_apps___app, [:app_id]).order(Sequel.desc(:date))
+  end
+  csv = "Date,Rank\n"
+  @records.each do |r|
+    csv += r[:date].strftime("%Y-%m-%d") + "," + r[:rank].to_s + "\n"
+  end
+
+  return csv
+end
+
+
+
 get '/tsv' do
   if params[:app_id]
     @app = RankingApps.filter(:app_id => params[:app_id]).first

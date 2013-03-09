@@ -98,7 +98,6 @@ post '/app/create' do
   end
 end
 
-
 get '/ranking' do
   params[:store_type] = 0 unless params[:store_type]
   @store_type = params[:store_type]
@@ -128,13 +127,17 @@ get '/ranking' do
   @records.each do | record |
     next unless record[:genre]
     if @genres[record[:genre]]
-      @genres[record[:genre]] += 1
+      @genres[record[:genre]][:count] += 1
     else
-      @genres[record[:genre]] = 1
+      @genres[record[:genre]] = {}
+      @genres[record[:genre]][:count] = 1
     end
     total_count += 1
   end
 
+  @genres.each do |k, v|
+    v[:share] = (v[:count].to_f / total_count.to_f)
+  end
 
   erb :ranking
 end
@@ -143,10 +146,6 @@ get '/graph' do
   if params[:app_id]
     @app = RankingApps.filter(:app_id => params[:app_id]).first
   else
-    return 'not found'
-  end
-
-  if @app==nil
     return 'not found'
   end
 
@@ -159,22 +158,6 @@ get '/graph' do
   end
 
   erb :graph
-end
-
-get '/csv' do
-  if @genre_id
-    @records = RankingRecords.filter(:app_id => params[:app_id], :ranking_records__genre => @genre_id)\
-      .join_table(:left, :ranking_apps___app, [:app_id]).order(Sequel.desc(:date))
-  else
-    @records = RankingRecords.filter(:app_id => params[:app_id], :ranking_records__genre => nil)\
-      .join_table(:left, :ranking_apps___app, [:app_id]).order(Sequel.desc(:date))
-  end
-  csv = "Date,Rank\n"
-  @records.each do |r|
-    csv += r[:date].strftime("%Y-%m-%d") + "," + r[:rank].to_s + "\n"
-  end
-
-  return csv
 end
 
 get '/tsv' do

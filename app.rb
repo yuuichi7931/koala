@@ -127,16 +127,11 @@ get '/ranking' do
   @records.each do | record |
     next unless record[:genre]
     if @genres[record[:genre]]
-      @genres[record[:genre]][:count] += 1
+      @genres[record[:genre]] += 1
     else
-      @genres[record[:genre]] = {}
-      @genres[record[:genre]][:count] = 1
+      @genres[record[:genre]] = 1
     end
     total_count += 1
-  end
-
-  @genres.each do |k, v|
-    v[:share] = (v[:count].to_f / total_count.to_f)
   end
 
   erb :ranking

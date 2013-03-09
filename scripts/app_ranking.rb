@@ -10,8 +10,15 @@ class AppRanking
   end
 
   def fetch
-    fetch_apple_ranking
-    fetch_google_ranking
+    begin
+      fetch_apple_ranking
+    rescue
+    end
+
+    begin
+      fetch_google_ranking
+    rescue
+    end
   end
 
   def fetch_apple_ranking
@@ -23,17 +30,30 @@ class AppRanking
     if defined? AppConfig::APP_STORE_RANKING_GENRES
       AppConfig::APP_STORE_RANKING_GENRES.each do |genre|
         opt[:genre] = genre[:id]
-        task.fetch_ranking(opt)
+        result = task.fetch_ranking(opt)
+        unless result==1
+          puts "fetch_apple_ranking returned error: " + result.to_s
+          return false
+        end
       end
     end
 
     #task.fetch_rating
+
+    return true
   end
 
   def fetch_google_ranking
     opt = {:store_type => 1}
     task = GooglePlayRanking.new
-    task.fetch_ranking(opt)
+    result = task.fetch_ranking(opt)
+    unless result==1
+      puts "fetch_google_ranking returned error: " + result.to_s
+      return false
+    end
+
     task.fetch_genres
+
+    return true
   end
 end

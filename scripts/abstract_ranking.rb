@@ -10,17 +10,22 @@ class AbstractRanking
     apps.each do |app|
       next unless app["app_id"]
       if RankingApps.filter(:app_id => app["app_id"]).count == 0
-        RankingApps.create(
-          :app_id     => app["app_id"],
-          :name       => app["name"],
-          :genre      => app["genre"],
-          :developer  => app["developer"],
-          :url        => app["url"],
-          :thumbnail  => app["thumbnail"],
-          :created_at => Time.now
-        )
+        begin
+          RankingApps.create(
+            :app_id     => app["app_id"],
+            :name       => app["name"],
+            :genre      => app["genre"],
+            :developer  => app["developer"],
+            :url        => app["url"],
+            :thumbnail  => app["thumbnail"],
+            :created_at => Time.now
+          )
+        rescue Sequel::ValidationFailed
+          return false
+        end
       end
     end
+    return true
   end
 
   def register_rankings(apps, opt)
@@ -43,16 +48,23 @@ class AbstractRanking
 
     apps.each do |app|
       next unless app["app_id"]
-      RankingRecords.create(
-        :app_id     => app["app_id"],
-        :rank       => app["rank"].to_i,
-        :rating     => app["rating"],
-        :date       => ranking_date,
-        :genre      => opt[:genre],
-        :store_type => app["store_type"],
-        :created_at => Time.now
-      )
+
+      begin
+        RankingRecords.create(
+          :app_id     => app["app_id"],
+          :rank       => app["rank"].to_i,
+          :rating     => app["rating"],
+          :date       => ranking_date,
+          :genre      => opt[:genre],
+          :store_type => app["store_type"],
+          :created_at => Time.now
+        )
+      rescue Sequel::ValidationFailed
+        return false
+      end
     end
+
+    return true
   end
 
 end

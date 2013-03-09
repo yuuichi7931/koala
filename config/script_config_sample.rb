@@ -8,4 +8,6 @@ class ScriptConfig
   NOTIFY_ROOMS = {
     'com.exapmle'=>'test_room'
   }
+
+  ADMIN_EMAIL = 'admin@example.com'
 end

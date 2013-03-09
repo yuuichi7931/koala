@@ -12,6 +12,8 @@ class GooglePlayRanking < AbstractRanking
 
   STORE_TYPE = 1
 
+  # if script failed to register apps, this method returns -1
+  # if script failed to register ranking records, this method returns -2
   def fetch_ranking(opt={})
     rankings = croll(opt)
     (1..7).each do |page|
@@ -19,8 +21,14 @@ class GooglePlayRanking < AbstractRanking
       rankings.concat croll(opt)
     end
 
-    register_apps(rankings)
-    register_rankings(rankings, opt)
+    if register_apps(rankings)
+      unless register_rankings(rankings, opt)
+        return -2
+      end
+    else
+      return -1
+    end
+    return 1
   end
 
   def croll(opt={})
@@ -106,3 +114,5 @@ class GooglePlayRanking < AbstractRanking
   end
 
 end
+
+class AppStoreRankingException < Exception; end

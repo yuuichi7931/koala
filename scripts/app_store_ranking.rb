@@ -11,6 +11,8 @@ class AppStoreRanking < AbstractRanking
 
   STORE_TYPE = 0
 
+  # if script failed to register apps, this method returns -1
+  # if script failed to register ranking records, this method returns -2
   def fetch_ranking(opt)
     if opt[:limit]==nil
       opt[:limit] = 100
@@ -24,8 +26,14 @@ class AppStoreRanking < AbstractRanking
 
     xml = open(url).read
     rankings = parse_rankings(xml)
-    register_apps(rankings)
-    register_rankings(rankings, opt)
+    if register_apps(rankings)
+      unless register_rankings(rankings, opt)
+        return -2
+      end
+    else
+      return -1
+    end
+    return 1
   end
 
   def parse_rankings(xml)
@@ -40,7 +48,7 @@ class AppStoreRanking < AbstractRanking
     document.xpath('.//atom:entry', ns).each do |elm|
       app = {}
       app["store_type"] = STORE_TYPE
-      app["app_id"]     = elm.xpath('.//atom:id',ns)[0]["id"].to_s
+      app["app_id"]     = elm.xpath('.//atom:id',ns)[0]["im:id"].to_s
       app["name"]       = elm.xpath('.//im:name',ns)[0].content
       app["genre"]      = elm.xpath('.//atom:category',ns)[0]["label"]
       app["developer"]  = elm.xpath('.//im:artist',ns)[0].content
@@ -55,3 +63,5 @@ class AppStoreRanking < AbstractRanking
     return apps
   end
 end
+
+class AppStoreRankingException < Exception; end

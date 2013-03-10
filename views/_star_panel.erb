@@ -1,42 +1,46 @@
 <% total_count = stars[4] + stars[3] + stars[2] + stars[1] + stars[0] %>
 <% if 0<total_count %>
-<div id="stars">
-  <div class="row">
-  <h3>レビュー評価</h3>
-  <table class="table table-bordered">
-    <tbody>
-      <tr>
-        <td class="span1"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i></td>
-        <td class="span1"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i></td>
-        <td class="span1"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i></td>
-        <td class="span1"><i class="icon-star"></i><i class="icon-star"></i></td>
-        <td class="span1"><i class="icon-star"></i></td>
-        <td class="span1">合計</i></td>
-      </tr>
-      <tr>
-        <td><%= stars[4] %></td>
-        <td><%= stars[3] %></td>
-        <td><%= stars[2] %></td>
-        <td><%= stars[1] %></td>
-        <td><%= stars[0] %></td>
-        <td><%= total_count %></td>
-      </tr>
-      <tr>
-        <td><%= (stars[4] * 100) / total_count %>%</td>
-        <td><%= (stars[3] * 100) / total_count %>%</td>
-        <td><%= (stars[2] * 100) / total_count %>%</td>
-        <td><%= (stars[1] * 100) / total_count %>%</td>
-        <td><%= (stars[0] * 100) / total_count %>%</td>
-        <td>100%</td>
-      </tr>
-    </tbody>
-  </table>
-  </div>
 
-  <div class="row">
-    <h3>評価分布</h3>
-    <div id="evaluation_graph"></div>
-    <div id="evaluation_graph_caption"></div>
-  </div>
+<div class="row-fluid">
+    <div id="stars">
+      <div class="span5">
+        <h4>評価分布</h4>
+        <div id="evaluation_graph"></div>
+        <div id="evaluation_graph_caption"></div>
+      </div>
+
+      <div class="span7">
+      <h4>レビュー評価</h4>
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td class="span1"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i></td>
+            <td class="span1"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i></td>
+            <td class="span1"><i class="icon-star"></i><i class="icon-star"></i><i class="icon-star"></i></td>
+            <td class="span1"><i class="icon-star"></i><i class="icon-star"></i></td>
+            <td class="span1"><i class="icon-star"></i></td>
+            <td class="span1">合計</i></td>
+          </tr>
+          <tr>
+            <td><%= stars[4] %></td>
+            <td><%= stars[3] %></td>
+            <td><%= stars[2] %></td>
+            <td><%= stars[1] %></td>
+            <td><%= stars[0] %></td>
+            <td><%= total_count %></td>
+          </tr>
+          <tr>
+            <td><%= (stars[4] * 100) / total_count %>%</td>
+            <td><%= (stars[3] * 100) / total_count %>%</td>
+            <td><%= (stars[2] * 100) / total_count %>%</td>
+            <td><%= (stars[1] * 100) / total_count %>%</td>
+            <td><%= (stars[0] * 100) / total_count %>%</td>
+            <td>100%</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+
+    </div>
 </div>
 <% end %>

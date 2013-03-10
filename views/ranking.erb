@@ -21,11 +21,6 @@
           display: none;
           }
 
-          label {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          }
         </style>
 
         <script type="text/javascript">
@@ -193,13 +188,11 @@
                     <% if @records && 0< @records.count%>
                       <div class="row">
                         <% if @store_type=='0' %>
-                          <h1>App Store Ranking ( <%= @date %> )<% if @genre_id %> ジャンル: <%= @genre_name %><% end %></h1>
+                          <h3>ランキング &gt; App Store ( <%= @date %> )<% if @genre_id %> ジャンル: <%= @genre_name %><% end %></h3>
                         <% else  %>
-                          <h1>Google play Ranking ( <%= @date %> )</h1>
+                          <h3>ランキング &gt; Google play( <%= @date %> )</h3>
                         <% end %>
                       </div>
-
-
 
                       <div class="btn-group">
                         <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -216,7 +209,7 @@
                           <% end %>
                         </ul>
                       </div>
-
+                      <br />
 
                       <svg id="genres" width="0px" height="0px"/>
 

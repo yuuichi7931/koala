@@ -1,6 +1,6 @@
 function render_graph(data){
     var GRAPH_HEIGHT = 60;
-    var GRAPH_WIDTH = 600;
+    var GRAPH_WIDTH = 350;
     var COLORS = ["#5BB75B", "#0074CC", "#49AFCD", "#FAA732", "#DA4F49"];
     var graphElement = $("#evaluation_graph");
     var totalScore = 0;

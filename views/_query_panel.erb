@@ -1,25 +1,17 @@
-<div class="side-content row">
-    <div class="row">
-  <h3>条件指定</h3>
-  <form id="query-panel" action="" method="GET">
-    <% if versions %>
-      <div class="controls">
-        <label class="control-label">バージョン</label>
-        <select name="version" class="span2">
-          <option>ALL</option>
-          <% versions.each do |v| %>
-            <% if version %>
-                <% selected = (version.to_s==v[:version].to_s)?'selected':'' %>
-                <option <%= selected %>><%= v[:version] %></option>
-            <% else %>
-            <option><%= v[:version] %></option>
-            <% end %>
-          <% end %>
-        </select>
-      </div>
-      <input type="hidden" name="app_id" value="<%= app_id %>" class="btn" />
-      <button type="submit" class="btn">SEARCH</button>
-    <% end %>
-  </form>
-</div>
-</div>
+<form id="query-panel" action="" method="GET">
+<% if versions %>
+    <strong>version:</strong>
+    <select name="version" class="span2" style="margin-top:6px" onchange="submit(this.form)">
+      <option>ALL</option>
+      <% versions.each do |v| %>
+        <% if version %>
+            <% selected = (version.to_s==v[:version].to_s)?'selected':'' %>
+            <option <%= selected %>><%= v[:version] %></option>
+        <% else %>
+        <option><%= v[:version] %></option>
+        <% end %>
+      <% end %>
+    </select>
+  <input type="hidden" name="app_id" value="<%= app_id %>" class="btn" />
+<% end %>
+</form>

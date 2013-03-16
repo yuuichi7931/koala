@@ -98,6 +98,16 @@ post '/app/create' do
   end
 end
 
+post '/app/delete' do
+  begin
+    Apps[params[:id]].delete
+    'ok'
+  rescue => exception
+    p(exception)
+    halt 403, "bad parameters"
+  end
+end
+
 get '/ranking' do
   params[:store_type] = 0 unless params[:store_type]
   @store_type = params[:store_type]

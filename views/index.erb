@@ -19,6 +19,16 @@
                 $('#add_app_form').toggle();
             });
 
+            var delete_form_option = {
+              success: function() {
+                  document.location.reload(true);
+              },
+              error: function() {
+                  alert('error');
+              }
+            }; 
+            $('#delete_app').ajaxForm(delete_form_option);
+
             var graph_data = [
                 {value: <%= @stars[4] %>},
                 {value: <%= @stars[3] %>},
@@ -74,6 +84,14 @@
                       <%= partial(:_keyword_panel, :keywords => @keywords) %>
 
                       <%= partial(:_review_table, :reviews => @reviews) %>
+
+                      <br />
+                      <br />
+                      <br />
+                      <form id="delete_app" method="POST" action="/app/delete">
+                          <input class="input-medium" type="hidden" name="id" value="<%= @app[:id] %>"/>
+                          <button type="submit" class="btn btn-danger pull-right">削除</button>
+                      </form>
 
                     <% else %>
                       アプリが登録されていません

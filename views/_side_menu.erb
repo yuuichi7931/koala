@@ -5,12 +5,16 @@
       <li><a href="/ranking?store_type=0">App Store</a></li>
       <% if app_store_genres %>
         <ul>
+        <li><a href="/ranking/new?store_type=0"><b>初登場</b></a></li>
       <% app_store_genres.each do |genre| %>
         <li><a href="/ranking?store_type=0&genre_id=<%= genre[:id] %>"><%= genre[:name] %></a></li>
       <% end%>
         </ul>
       <% end%>
       <li><a href="/ranking?store_type=1">Google play</a></li>
+        <ul>
+        <li><a href="/ranking/new?store_type=1"><b>初登場</b></a></li>
+        </ul>
     </ul>
   </div>
 

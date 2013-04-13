@@ -147,6 +147,36 @@ get '/ranking' do
   erb :ranking
 end
 
+get '/ranking/new' do
+  params[:store_type] = 0 unless params[:store_type]
+  @store_type = params[:store_type]
+  @date = params[:date]
+  @date_list = RankingRecords.dates(@genre_id)
+  return erb :ranking unless @date_list.first
+
+  @is_new = 1
+  unless @date
+    latest_time = @date_list.first[:date]
+    @date = latest_time.strftime("%Y-%m-%d")
+  end
+
+  @records = RankingRecords.news(@store_type, @date, @genre_id)
+
+  @genres = {}
+  total_count = 0
+  @records.each do | record |
+    next unless record[:genre]
+    if @genres[record[:genre]]
+      @genres[record[:genre]] += 1
+    else
+      @genres[record[:genre]] = 1
+    end
+    total_count += 1
+  end
+
+  erb :ranking
+end
+
 get '/graph' do
   if params[:app_id]
     @app = RankingApps.filter(:app_id => params[:app_id]).first

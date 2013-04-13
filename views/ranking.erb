@@ -187,10 +187,18 @@
                 <div class="container">
                     <% if @records && 0< @records.count%>
                       <div class="row">
-                        <% if @store_type=='0' %>
-                          <h3>ランキング &gt; App Store ( <%= @date %> )<% if @genre_id %> ジャンル: <%= @genre_name %><% end %></h3>
-                        <% else  %>
-                          <h3>ランキング &gt; Google play( <%= @date %> )</h3>
+                        <% if @is_new==1 %>
+				<% if @store_type=='0' %>
+				  <h3>ランキング初登場 &gt; App Store ( <%= @date %> )<% if @genre_id %> ジャンル: <%= @genre_name %><% end %></h3>
+				<% else  %>
+				  <h3>ランキング初登場 &gt; Google play( <%= @date %> )</h3>
+				<% end %>
+                        <% else %>
+				<% if @store_type=='0' %>
+				  <h3>ランキング &gt; App Store ( <%= @date %> )<% if @genre_id %> ジャンル: <%= @genre_name %><% end %></h3>
+				<% else  %>
+				  <h3>ランキング &gt; Google play( <%= @date %> )</h3>
+				<% end %>
                         <% end %>
                       </div>
 
@@ -213,7 +221,7 @@
 
                       <svg id="genres" width="0px" height="0px"/>
 
-                      <%= partial(:_ranking_table, :records => @records, :genre_id => @genre_id) %>
+                      <%= partial(:_ranking_table, :records => @records, :genre_id => @genre_id, :is_new => @is_new) %>
                     <% else %>
                       ランキングが登録されていません
                     <% end %>

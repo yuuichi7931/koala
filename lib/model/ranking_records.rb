@@ -30,4 +30,28 @@ class RankingRecords < Sequel::Model
       self.db.fetch("SELECT DISTINCT date FROM ranking_records ORDER BY date DESC")
     end
   end
+
+  def self.news(store_type, start_date, genre_id=nil)
+    start_time = Time.parse(start_date)
+    end_time = Time.parse(start_date) + 86400
+    unless genre_id
+      query = 'SELECT  * FROM ranking_records'
+      query += ' LEFT JOIN ranking_apps'
+      query += ' ON ranking_apps.app_id = ranking_records.app_id'
+      query += ' WHERE ( (store_type = ?)'
+      query += ' AND (ranking_apps.created_at > ?) AND (ranking_apps.created_at < ?)'
+      query += ' AND (date = ?))'
+      query += ' ORDER BY rank'
+      self.db.fetch(query, store_type, start_time, end_time, start_time)
+    else
+      query = 'SELECT  * FROM ranking_records'
+      query += ' LEFT JOIN ranking_apps'
+      query += ' ON ranking_apps.app_id = ranking_records.app_id'
+      query += ' WHERE ( (store_type = ?)'
+      query += ' AND (ranking_apps.created_at > ?) AND (ranking_apps.created_at < ?)'
+      query += ' AND (date = ?) AND genre = ?)'
+      query += ' ORDER BY rank'
+      self.db.fetch(query, store_type, start_time, end_time, start_time, genre_id)
+    end
+  end
 end

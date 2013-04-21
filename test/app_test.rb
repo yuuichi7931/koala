@@ -4,6 +4,7 @@ require File.dirname(__FILE__) + '/test_helper'
 
 class AppTest < Test::Unit::TestCase
   include Rack::Test::Methods
+  include Koala::Helpers
 
   def app
     Sinatra::Application
@@ -43,5 +44,4 @@ class AppTest < Test::Unit::TestCase
     post '/app/create', :app_id => 'com.example', :app_name => 'test_app'
     assert_equal 200, last_response.status
   end
-
 end

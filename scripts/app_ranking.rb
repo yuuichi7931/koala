@@ -52,7 +52,6 @@ class AppRanking
     result = task.fetch_free_ranking(opt)
     unless result==1
       puts "fetch_google_ranking returned error: " + result.to_s
-      #return false
     end
     task.fetch_paid_ranking(opt)
     task.fetch_grossing_ranking(opt)

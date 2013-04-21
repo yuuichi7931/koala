@@ -22,6 +22,7 @@ class GooglePlayRanking < AbstractRanking
       result = croll(opt)
       rankings.concat result
     end
+    puts rankings.length.to_s + " RECORDS"
 
     if register_apps(rankings)
       unless register_rankings(rankings, opt)
@@ -34,27 +35,37 @@ class GooglePlayRanking < AbstractRanking
   end
 
   def fetch_free_ranking(opt)
+    puts "GooglePlayRanking::fetch_free_ranking"
     opt[:ranking_type] = 0
+    opt[:page] = nil
     fetch_ranking(opt)
   end
 
   def fetch_paid_ranking(opt)
+    puts "GooglePlayRanking::fetch_paid_ranking"
     opt[:ranking_type] = 1
+    opt[:page] = nil
     fetch_ranking(opt)
   end
 
   def fetch_grossing_ranking(opt)
+    puts "GooglePlayRanking::fetch_grossing_ranking"
     opt[:ranking_type] = 2
+    opt[:page] = nil
     fetch_ranking(opt)
   end
 
   def fetch_new_paid_ranking(opt)
+    puts "GooglePlayRanking::fetch_new_paid_ranking"
     opt[:ranking_type] = 3
+    opt[:page] = nil
     fetch_ranking(opt)
   end
 
   def fetch_new_free_ranking(opt)
+    puts "GooglePlayRanking::fetch_new_free_ranking"
     opt[:ranking_type] = 4
+    opt[:page] = nil
     fetch_ranking(opt)
   end
 
@@ -78,6 +89,7 @@ class GooglePlayRanking < AbstractRanking
       start = 24 * opt[:page].to_i
       url = "https://play.google.com/store/apps/collection/#{category}?start=#{start}&num=24"
     end
+    puts "GET: " + url
 
     return url
   end

@@ -22,15 +22,18 @@ class AppRanking
   end
 
   def fetch_apple_ranking
-    opt = {:limit=>200,:store_type=>0}
+    opt = {:limit=>200}
     
     task = AppStoreRanking.new
-    task.fetch_ranking(opt)
+    task.fetch_free_ranking(opt)
+    task.fetch_paid_ranking(opt)
+    task.fetch_grossing_ranking(opt)
+    task.fetch_new_ranking(opt)
 
     if defined? AppConfig::APP_STORE_RANKING_GENRES
       AppConfig::APP_STORE_RANKING_GENRES.each do |genre|
         opt[:genre] = genre[:id]
-        result = task.fetch_ranking(opt)
+        result = task.fetch_free_ranking(opt)
         unless result==1
           puts "fetch_apple_ranking returned error: " + result.to_s
           return false
@@ -44,13 +47,17 @@ class AppRanking
   end
 
   def fetch_google_ranking
-    opt = {:store_type => 1}
+    opt = {}
     task = GooglePlayRanking.new
-    result = task.fetch_ranking(opt)
+    result = task.fetch_free_ranking(opt)
     unless result==1
       puts "fetch_google_ranking returned error: " + result.to_s
-      return false
+      #return false
     end
+    task.fetch_paid_ranking(opt)
+    task.fetch_grossing_ranking(opt)
+    task.fetch_new_paid_ranking(opt)
+    task.fetch_new_free_ranking(opt)
 
     task.fetch_genres
 

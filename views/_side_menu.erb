@@ -2,18 +2,27 @@
   <div class="row">
     <h4>ランキング</h4>
     <ul class="nav nav-pills nav-stacked span2">
-      <li><a href="/ranking?store_type=0">App Store</a></li>
-      <% if app_store_genres %>
+      <li>App Store</li>
         <ul>
-        <li><a href="/ranking/new?store_type=0"><b>初登場</b></a></li>
+        <li><a href="/ranking?store_type=0&ranking_type=0"><b>トップ無料</b></a></li>
+              <% if app_store_genres %>
+        <ul>
       <% app_store_genres.each do |genre| %>
         <li><a href="/ranking?store_type=0&genre_id=<%= genre[:id] %>"><%= genre[:name] %></a></li>
       <% end%>
         </ul>
+        <li><a href="/ranking?store_type=0&ranking_type=1"><b>トップ有料</b></a></li>
+        <li><a href="/ranking?store_type=0&ranking_type=2"><b>トップセラー</b></a></li>
+        <li><a href="/ranking?store_type=0&ranking_type=3"><b>新着</b></a></li>
+        </ul>
       <% end%>
-      <li><a href="/ranking?store_type=1">Google play</a></li>
+      <li>Google play</li>
         <ul>
-        <li><a href="/ranking/new?store_type=1"><b>初登場</b></a></li>
+            <li><a href="/ranking?store_type=1&ranking_type=0"><b>トップ無料</b></a></li>
+            <li><a href="/ranking?store_type=1&ranking_type=1"><b>トップ有料</b></a></li>
+            <li><a href="/ranking?store_type=1&ranking_type=2"><b>トップセラー</b></a></li>
+            <li><a href="/ranking?store_type=1&ranking_type=3"><b>新着有料</b></a></li>
+            <li><a href="/ranking?store_type=1&ranking_type=4"><b>新着無料</b></a></li>
         </ul>
     </ul>
   </div>

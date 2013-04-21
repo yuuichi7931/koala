@@ -15,10 +15,12 @@ class GooglePlayRanking < AbstractRanking
   # if script failed to register apps, this method returns -1
   # if script failed to register ranking records, this method returns -2
   def fetch_ranking(opt={})
+    opt[:store_type] = STORE_TYPE
     rankings = croll(opt)
     (1..7).each do |page|
       opt[:page] = page
-      rankings.concat croll(opt)
+      result = croll(opt)
+      rankings.concat result
     end
 
     if register_apps(rankings)
@@ -31,31 +33,83 @@ class GooglePlayRanking < AbstractRanking
     return 1
   end
 
-  def croll(opt={})
+  def fetch_free_ranking(opt)
+    opt[:ranking_type] = 0
+    fetch_ranking(opt)
+  end
+
+  def fetch_paid_ranking(opt)
+    opt[:ranking_type] = 1
+    fetch_ranking(opt)
+  end
+
+  def fetch_grossing_ranking(opt)
+    opt[:ranking_type] = 2
+    fetch_ranking(opt)
+  end
+
+  def fetch_new_paid_ranking(opt)
+    opt[:ranking_type] = 3
+    fetch_ranking(opt)
+  end
+
+  def fetch_new_free_ranking(opt)
+    opt[:ranking_type] = 4
+    fetch_ranking(opt)
+  end
+
+  def get_ranking_url(opt)
+    url = ""
+    opt[:ranking_type] = 0 unless opt[:ranking_type]
+
+    categories = {
+      0 => 'topselling_free',
+      1 => 'topselling_paid',
+      2 => 'topgrossing',
+      3 => 'topselling_new_paid',
+      4 => 'topselling_new_free',
+    }
+    category = categories[opt[:ranking_type]]
+    return url unless category
+    
     if opt[:page]==nil || opt[:page]==0
-      url = "https://play.google.com/store/apps/collection/topselling_free"
+      url = "https://play.google.com/store/apps/collection/#{category}"
     else 
       start = 24 * opt[:page].to_i
-      url = "https://play.google.com/store/apps/collection/topselling_free?start=#{start}&num=24"
+      url = "https://play.google.com/store/apps/collection/#{category}?start=#{start}&num=24"
     end
+
+    return url
+  end
+
+  def croll(opt={})
+    url = get_ranking_url(opt)
     opt[:base_url] = "https://play.google.com"
 
-    html = open(url).read
+    begin
+      html = open(url).read
+    rescue Exception => e
+      p e
+    end
     rankings = get_ranking(html, opt)
     return rankings
   end
 
   def get_ranking(html, opt)
     records = [];
-    doc = Nokogiri.HTML(html)
-    doc.xpath('//li[@class="goog-inline-block"]').each do |node|
-      app = parse_ranking_app(node, opt)
-      records.push app
-    end
+    begin
+      doc = Nokogiri.HTML(html)
+      doc.xpath('//li[@class="goog-inline-block"]').each do |node|
+        app = parse_ranking_app(node, opt)
+        records.push app
+      end
 
-    doc.xpath('//li[@class="goog-inline-block z-last-child"]').each do |node|
-      app = parse_ranking_app(node, opt)
-      records.push app
+      doc.xpath('//li[@class="goog-inline-block z-last-child"]').each do |node|
+        app = parse_ranking_app(node, opt)
+        records.push app
+      end
+    rescue => e
+      p e
     end
 
     return records
@@ -71,7 +125,12 @@ class GooglePlayRanking < AbstractRanking
       app["developer"]  = node.xpath(".//a")[2].content
       app["name"]       = node.xpath(".//a")[1]["title"]
       app["developer"]  = node.xpath(".//a")[2].content
-      app["rating"]     = node.xpath(".//div[@class='ratings goog-inline-block']")[0]["title"]
+      if node.xpath(".//div[@class='ratings goog-inline-block']")[0]
+        app["rating"]     = node.xpath(".//div[@class='ratings goog-inline-block']")[0]["title"]
+      else
+        app["rating"]     = ""
+      end
+      app["price"]      = node.xpath(".//span[@class='buy-offer default-offer']")[0]["data-docprice"]
       return app
   end
 

@@ -38,6 +38,38 @@ helpers do
     return formatted_string_array.join("<br />")
   end
 
+  def ranking_title(store_type, ranking_type, date, genre_name=nil)
+    title = ""
+    categories = {
+      0 => {
+        0 => 'トップ無料',
+        1 => 'トップ有料',
+        2 => 'トップセラー',
+        3 => '新着',
+      },
+      1 => {
+        0 => 'トップ無料',
+        1 => 'トップ有料',
+        2 => 'トップセラー',
+        3 => '新着有料',
+        4 => '新着無料',
+      }
+    }
+
+    category = categories[store_type.to_i][ranking_type.to_i]
+    if store_type=='0'
+      title = "ランキング > App Store > #{category} ( #{date} )"
+    else 
+      title = "ランキング > Google Play > #{category} ( #{date} )"
+    end
+
+    if genre_name != nil && genre_name != ''
+      title += " ジャンル: #{genre_name}"
+    end
+
+    return title
+  end
+
   def get_genre(app)
     @app_store_genres.each do |genre|
       if genre[:name]==app[:genre]
@@ -110,7 +142,9 @@ end
 
 get '/ranking' do
   params[:store_type] = 0 unless params[:store_type]
+  params[:ranking_type] = 0 unless params[:ranking_type]
   @store_type = params[:store_type]
+  @ranking_type = params[:ranking_type]
   @date = params[:date]
   @date_list = RankingRecords.dates(@genre_id)
   return erb :ranking unless @date_list.first
@@ -123,11 +157,13 @@ get '/ranking' do
   if @genre_id
     @records = RankingRecords.filter(:store_type => @store_type,
                                      :date => Time.parse(@date),
+                                     :ranking_type => @ranking_type,
                                      :ranking_records__genre => @genre_id)\
                                      .join_table(:left, :ranking_apps___app, [:app_id]).order(:rank)
   else
     @records = RankingRecords.filter(:store_type => @store_type,
                                      :date => Time.parse(@date),
+                                     :ranking_type => @ranking_type,
                                      :ranking_records__genre => nil)\
                                      .join_table(:left, :ranking_apps___app, [:app_id]).order(:rank)
   end
@@ -189,10 +225,18 @@ get '/graph' do
   end
 
   if @genre_id
-    @records = RankingRecords.filter(:app_id => params[:app_id], :ranking_records__genre => @genre_id)\
+    @records = RankingRecords.filter(
+      :app_id => params[:app_id],
+      :ranking_type => params[:ranking_type],
+      :ranking_records__genre => @genre_id
+    )\
       .join_table(:left, :ranking_apps___app, [:app_id]).order(Sequel.desc(:date))
   else
-    @records = RankingRecords.filter(:app_id => params[:app_id], :ranking_records__genre => nil)\
+    @records = RankingRecords.filter(
+      :app_id => params[:app_id],
+      :ranking_type => params[:ranking_type],
+      :ranking_records__genre => nil
+    )\
       .join_table(:left, :ranking_apps___app, [:app_id]).order(Sequel.desc(:date))
   end
 

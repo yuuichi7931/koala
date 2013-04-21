@@ -6,11 +6,12 @@ class RankingRecords < Sequel::Model
     set_schema do
       primary_key :id
       int :rank
-      int :store_type #0=> Apple, 1=>Google play
+      int :store_type   # 0 => Apple, 1 => Google play
+      int :ranking_type # 0 => free app, 1 => paid app, 2 => top-sales app
       string :app_id
       string :rating
       string :keyword
-      string :genre # genre of App Store
+      string :genre     # genre of App Store
       timestamp :date
       timestamp :created_at
       index [:created_at, :app_id]

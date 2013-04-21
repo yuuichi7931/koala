@@ -17,10 +17,11 @@ class AbstractRanking
             :genre      => app["genre"],
             :developer  => app["developer"],
             :url        => app["url"],
+            :price      => app["price"],
             :thumbnail  => app["thumbnail"],
             :created_at => Time.now
           )
-        rescue Sequel::ValidationFailed
+        rescue Sequel::ValidationFailed => e
           return false
         end
       end
@@ -36,13 +37,17 @@ class AbstractRanking
       ranking_date = Time.parse(opt[:date])
     end
 
+    ranking_type = (opt[:ranking_type])?opt[:ranking_type]:0
+
     if opt[:genre]
       return unless RankingRecords.filter(:date => ranking_date,
                                           :store_type => opt[:store_type],
+                                          :ranking_type => ranking_type,
                                           :genre => opt[:genre]).count == 0
     else
       return unless RankingRecords.filter(:date => ranking_date,
                                           :store_type => opt[:store_type],
+                                          :ranking_type => ranking_type,
                                           :genre => nil).count == 0
     end
 
@@ -57,10 +62,16 @@ class AbstractRanking
           :date       => ranking_date,
           :genre      => opt[:genre],
           :store_type => app["store_type"],
+          :ranking_type => ranking_type,
           :created_at => Time.now
         )
       rescue Sequel::ValidationFailed
+        p "Sequel::ValidationFailed"
         return false
+      rescue Sequel::Error
+        p "Sequel::Error"
+        return false
+      rescue => e
       end
     end
 

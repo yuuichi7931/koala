@@ -87,7 +87,9 @@ get '/ranking' do
     @date = latest_time.strftime("%Y-%m-%d")
   end
 
+  @ranking_path = "?store_type=" + @store_type
   if @genre_id
+    @ranking_path += "&genre_id=" + @genre_id
     @records = RankingRecords.filter(:store_type => @store_type,
                                      :date => Time.parse(@date),
                                      :ranking_type => @ranking_type,
@@ -99,6 +101,10 @@ get '/ranking' do
                                      :ranking_type => @ranking_type,
                                      :ranking_records__genre => nil)\
                                      .join_table(:left, :ranking_apps___app, [:app_id]).order(:rank)
+  end
+
+  if @ranking_type
+    @ranking_path += "&ranking_type=" + @ranking_type
   end
 
   @genres = {}

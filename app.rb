@@ -104,7 +104,7 @@ get '/ranking' do
   end
 
   if @ranking_type
-    @ranking_path += "&ranking_type=" + @ranking_type
+    @ranking_path += "&ranking_type=" + @ranking_type.to_s
   end
 
   @genres = {}

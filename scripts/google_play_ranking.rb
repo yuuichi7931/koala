@@ -11,13 +11,14 @@ require 'abstract_ranking'
 class GooglePlayRanking < AbstractRanking
 
   STORE_TYPE = 1
+  PAGING_SIZE = 60
 
   # if script failed to register apps, this method returns -1
   # if script failed to register ranking records, this method returns -2
   def fetch_ranking(opt={})
     opt[:store_type] = STORE_TYPE
     rankings = croll(opt)
-    (1..7).each do |page|
+    (1..3).each do |page|
       opt[:page] = page
       result = croll(opt)
       rankings.concat result
@@ -86,8 +87,8 @@ class GooglePlayRanking < AbstractRanking
     if opt[:page]==nil || opt[:page]==0
       url = "https://play.google.com/store/apps/collection/#{category}"
     else 
-      start = 24 * opt[:page].to_i
-      url = "https://play.google.com/store/apps/collection/#{category}?start=#{start}&num=24"
+      start = PAGING_SIZE * opt[:page].to_i
+      url = "https://play.google.com/store/apps/collection/#{category}?start=#{start}&num=#{PAGING_SIZE}"
     end
     puts "GET: " + url
 
@@ -114,7 +115,8 @@ class GooglePlayRanking < AbstractRanking
       i = 0
       doc.xpath('//div[@class="card apps square-cover small no-rationale"]').each do |node|
         i += 1
-        opt[:rank] = i
+        opt[:page] = 0 unless opt[:page]
+        opt[:rank] = i + (PAGING_SIZE * opt[:page].to_i)
         app = parse_ranking_app(node, opt)
         records.push app
       end

@@ -207,7 +207,20 @@
 
                       <%= partial(:_ranking_table, :records => @records, :genre_id => @genre_id, :is_new => @is_new, :ranking_type => @ranking_type) %>
                     <% else %>
+                      <br />
                       ランキングが登録されていません
+                      <br />
+                      <div class="btn-group">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                          日付を選択
+                          <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                          <% @date_list.each do |record| %>
+                              <li><a href="<%= @ranking_path %>&date=<%= formatted_date(record[:date], '-') %>"><%= formatted_date(record[:date], '-') %></a></li>
+                          <% end %>
+                        </ul>
+                      </div>
                     <% end %>
                 </div> 
         </div> 

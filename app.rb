@@ -217,6 +217,65 @@ get '/tsv' do
   return tsv
 end
 
+get '/ranking/apps' do
+  erb :apps_graph
+end
+
+get '/ranking/test' do
+  params[:store_type] = 0 unless params[:store_type]
+  params[:ranking_type] = 0 unless params[:ranking_type]
+  @store_type = params[:store_type]
+  @ranking_type = params[:ranking_type]
+  @date = params[:date]
+  @date_list = RankingRecords.dates(@genre_id)
+  return erb :ranking unless @date_list.first
+
+  unless @date
+    latest_time = @date_list.first[:date]
+    from_time = latest_time - (60 * 60 * 24 * 7)
+    @date = latest_time.strftime("%Y-%m-%d")
+    @from_date = from_time.strftime("%Y-%m-%d")
+  end
+
+  @records = RankingRecords.filter(:store_type => @store_type,
+                                   :ranking_type => @ranking_type,
+                                   :ranking_records__genre => nil)\
+                                   .filter('date >= ?', Time.parse(@from_date))\
+                                   .filter('date <= ?', Time.parse(@date))\
+                                   .filter('rank < 20')\
+                                   .join_table(:left, :ranking_apps___app, [:app_id]).order(:rank)
+
+  grouped_data = {}
+  apps = []
+  @records.each do |r|
+    rank_date = r[:date].strftime("%Y%m%d")
+    app_name = r[:name]
+    apps.push app_name
+
+    grouped_data[rank_date] = {} unless grouped_data[rank_date]
+    grouped_data[rank_date][app_name] = r[:rank]
+  end
+
+  apps.uniq!
+  title = "date\t" + apps.join("\t") + "\n"
+  tsv = title
+
+  app_count = apps.count
+  grouped_data.each do |date, record|
+    row = [].fill("NA",0,app_count + 1)
+    row[0] = date
+
+    record.each do |name, rank|
+       app_index = apps.index(name)
+       row[app_index + 1] = rank
+    end
+
+    tsv += row.join("\t") + "\n"
+  end
+
+  tsv
+end
+
 #
 # private methods
 #

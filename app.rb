@@ -5,6 +5,8 @@ require 'sinatra'
 require 'sinatra/reloader'
 require File.dirname(__FILE__) + '/config/init'
 require 'koala/helpers'
+require 'koala/util/string'
+require 'koala/util/time_util'
 
 
 use Rack::Session::Cookie,
@@ -80,6 +82,7 @@ get '/ranking' do
   @ranking_type = params[:ranking_type]
   @date = params[:date]
   @date_list = RankingRecords.dates(@genre_id)
+  @month_list = []
   return erb :ranking unless @date_list.first
 
   unless @date
@@ -87,7 +90,7 @@ get '/ranking' do
     @date = latest_time.strftime("%Y-%m-%d")
   end
 
-  @ranking_path = "?store_type=" + @store_type
+  @ranking_path = "?store_type=" + @store_type.to_s
   if @genre_id
     @ranking_path += "&genre_id=" + @genre_id
     @records = RankingRecords.filter(:store_type => @store_type,
@@ -221,28 +224,20 @@ get '/ranking/apps' do
   erb :apps_graph
 end
 
-get '/ranking/test' do
+get '/ranking/tsv' do
   params[:store_type] = 0 unless params[:store_type]
   params[:ranking_type] = 0 unless params[:ranking_type]
   @store_type = params[:store_type]
   @ranking_type = params[:ranking_type]
-  @date = params[:date]
-  @date_list = RankingRecords.dates(@genre_id)
-  return erb :ranking unless @date_list.first
 
-  unless @date
-    latest_time = @date_list.first[:date]
-    from_time = latest_time - (60 * 60 * 24 * 7)
-    @date = latest_time.strftime("%Y-%m-%d")
-    @from_date = from_time.strftime("%Y-%m-%d")
-  end
+  ym = params[:ym]
+  ym = '2013-06'
 
   @records = RankingRecords.filter(:store_type => @store_type,
                                    :ranking_type => @ranking_type,
                                    :ranking_records__genre => nil)\
-                                   .filter('date >= ?', Time.parse(@from_date))\
-                                   .filter('date <= ?', Time.parse(@date))\
-                                   .filter('rank < 20')\
+                                   .filter('date LIKE ?', ym + '%')\
+                                   .filter('rank <= 10')\
                                    .join_table(:left, :ranking_apps___app, [:app_id]).order(:rank)
 
   grouped_data = {}
@@ -273,7 +268,9 @@ get '/ranking/test' do
     tsv += row.join("\t") + "\n"
   end
 
-  tsv
+  content_type "text/tsv"
+  attachment "#{ym}.tsv"
+  tsv.sjisable.encode('Shift_JIS')
 end
 
 #

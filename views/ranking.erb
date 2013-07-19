@@ -190,6 +190,7 @@
                         <h3><%= ranking_title(@store_type, @ranking_type, @date, @genre_name)%></h3>
                       </div>
 
+                      ランキングの日付を選択:
                       <div class="btn-group">
                         <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                           日付を選択
@@ -199,6 +200,19 @@
                           <% @date_list.each do |record| %>
                               <li><a href="<%= @ranking_path %>&date=<%= formatted_date(record[:date], '-') %>"><%= formatted_date(record[:date], '-') %></a></li>
                           <% end %>
+                        </ul>
+                      </div>
+
+                      <br />
+                      <br />
+                      TOP10の月間推移をTSV(Shift_JIS)でダウンロード
+                      <div class="btn-group">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                          月を選択
+                          <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li><a href="/ranking/apps">ss</a></li>
                         </ul>
                       </div>
                       <br />

@@ -16,7 +16,7 @@ module Koala
     end
 
     def formatted_rate(str)
-      return $1 if /([\d\.]+)/ =~ str
+      return $1 if /([\d\.]+)/ =~ str.to_s
       return ''
     end
 

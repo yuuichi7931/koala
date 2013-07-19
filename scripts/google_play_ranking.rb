@@ -111,7 +111,10 @@ class GooglePlayRanking < AbstractRanking
     records = [];
     begin
       doc = Nokogiri.HTML(html)
-      doc.xpath('//li[@class="goog-inline-block"]').each do |node|
+      i = 0
+      doc.xpath('//div[@class="card apps square-cover small no-rationale"]').each do |node|
+        i += 1
+        opt[:rank] = i
         app = parse_ranking_app(node, opt)
         records.push app
       end
@@ -130,20 +133,30 @@ class GooglePlayRanking < AbstractRanking
   def parse_ranking_app(node, opt)
       app = {}
       app["store_type"] = STORE_TYPE
-      app["rank"]       = node.xpath(".//div[@class='ordinal-value']")[0].text
+      app["rank"]       = opt[:rank]
       app["app_id"]     = node["data-docid"]
       app["url"]        = opt[:base_url] + node.xpath(".//a")[0]["href"]
       app["thumbnail"]  = node.xpath(".//img")[0]["src"]
-      app["developer"]  = node.xpath(".//a")[2].content
-      app["name"]       = node.xpath(".//a")[1]["title"]
-      app["developer"]  = node.xpath(".//a")[2].content
-      if node.xpath(".//div[@class='ratings goog-inline-block']")[0]
-        app["rating"]     = node.xpath(".//div[@class='ratings goog-inline-block']")[0]["title"]
+      app["developer"]  = node.xpath(".//a[@class='subtitle']")[0].content
+      app["name"]  = node.xpath(".//a[@class='title']")[0].content
+
+      if node.xpath(".//div[@class='current-rating']")[0]
+        rating = node.xpath(".//div[@class='current-rating']")[0]["style"].sub('width: ','').sub('%;','').to_f
+        app["rating"] = rating_to_star rating
       else
-        app["rating"]     = ""
+        app["rating"] = ""
       end
-      app["price"]      = node.xpath(".//span[@class='buy-offer default-offer']")[0]["data-docprice"]
+
+      app["price"] = node.xpath(".//span[@class='price buy']")[0].content.strip
       return app
+  end
+
+  def rating_to_star(rating)
+    star = 0
+    if 0 < rating
+      star = (rating / 20).round(2)
+    end
+    return star
   end
 
   def fetch_genres

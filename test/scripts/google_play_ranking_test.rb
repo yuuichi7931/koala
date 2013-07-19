@@ -10,7 +10,7 @@ class GooglePlayRankingTest < Test::Unit::TestCase
   # end
 
   def test_get_ranking
-    f = open(File.dirname(__FILE__) + '/ranking/google_play.html')
+    f = open(File.dirname(__FILE__) + '/ranking/topselling_free.html')
     data = f.read
     opt = {:base_url => "https://play.google.com"}
     records = @obj.get_ranking(data, opt)
@@ -24,13 +24,23 @@ class GooglePlayRankingTest < Test::Unit::TestCase
       "name"=>"マクドナルド公式アプリ",
       "price"=>"無料",
       "rating"=>"評価: 星 3.6 個（良い）"}
+    expect = {"store_type"=>1,
+      "rank"=>9,
+      "app_id"=>"jp.naver.SJLINEPANG",
+      "url"=>"https://play.google.com/store/apps/details?id=jp.naver.SJLINEPANG",
+      "thumbnail"=>
+    "https://lh3.ggpht.com/qy40qQUSRMgNNkISVtr_neCP-ydrsDYT5ek0f5gWY6tvb7rxCZLeeVUZhx5HZjChvTM=w170",
+      "developer"=>"LINE Corporation",
+      "name"=>" LINE POP  ",
+      "rating"=>3.61,
+      "price"=>"無料"}
 
-    assert_equal(24, records.size)
+    assert_equal(60, records.size)
     assert_equal(expect, records[8])
   end
 
   def test_get_new_paid_ranking
-    f = open(File.dirname(__FILE__) + '/ranking/google_play_new_paid.html')
+    f = open(File.dirname(__FILE__) + '/ranking/topselling_paid.html')
     data = f.read
     opt = {:base_url => "https://play.google.com"}
     records = @obj.get_ranking(data, opt)
@@ -44,8 +54,19 @@ class GooglePlayRankingTest < Test::Unit::TestCase
       "name"=>"CRデラックス海物語",
       "rating"=>"評価: 星 3.8 個（良い）",
       "price"=>"￥1,300"}
+    expect = {"store_type"=>1,
+      "rank"=>9,
+      "app_id"=>"net.kairosoft.android.noujou_ja",
+      "url"=>
+        "https://play.google.com/store/apps/details?id=net.kairosoft.android.noujou_ja",
+      "thumbnail"=>
+        "https://lh3.ggpht.com/-Lw2bRG72izB-f5vhBJLK4SZWX5WLS2BvqPzDAPu3NPIrAskVXfmU9IuYe213cb7oas=w170",
+      "developer"=>"Kairosoft Co.,Ltd",
+      "name"=>" 大空ヘクタール農園  ",
+      "rating"=>4.75,
+      "price"=>"￥450"}
 
-    assert_equal(24, records.size)
+    assert_equal(60, records.size)
     assert_equal(expect, records[8])
   end
 

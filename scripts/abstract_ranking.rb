@@ -23,8 +23,6 @@ class AbstractRanking
           )
         rescue Sequel::ValidationFailed => e
           return false
-	rescue => e
-	  p e.backtrace
         end
       end
     end

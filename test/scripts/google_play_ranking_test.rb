@@ -76,19 +76,19 @@ class GooglePlayRankingTest < Test::Unit::TestCase
     assert_equal(expect, @obj.get_ranking_url(opt))
 
     opt = {:page => 1,:ranking_type => 1}
-    expect = "https://play.google.com/store/apps/collection/topselling_paid?start=50&num=50"
+    expect = "https://play.google.com/store/apps/collection/topselling_paid?start=60&num=60"
     assert_equal(expect, @obj.get_ranking_url(opt))
 
     opt = {:page => 1,:ranking_type => 2}
-    expect = "https://play.google.com/store/apps/collection/topgrossing?start=50&num=50"
+    expect = "https://play.google.com/store/apps/collection/topgrossing?start=60&num=60"
     assert_equal(expect, @obj.get_ranking_url(opt))
 
     opt = {:page => 1,:ranking_type => 3}
-    expect = "https://play.google.com/store/apps/collection/topselling_new_paid?start=50&num=50"
+    expect = "https://play.google.com/store/apps/collection/topselling_new_paid?start=60&num=60"
     assert_equal(expect, @obj.get_ranking_url(opt))
 
     opt = {:page => 1,:ranking_type => 4}
-    expect = "https://play.google.com/store/apps/collection/topselling_new_free?start=50&num=50"
+    expect = "https://play.google.com/store/apps/collection/topselling_new_free?start=60&num=60"
     assert_equal(expect, @obj.get_ranking_url(opt))
   end
 end

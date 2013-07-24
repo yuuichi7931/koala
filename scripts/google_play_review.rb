@@ -51,7 +51,9 @@ class GooglePlayReview < AbstractReview
       end
 
       node.xpath("//a[@class='no-nav g-hovercard']").each do |user_node|
-        users.push(user_node.text)
+	if user_node.attributes['title']
+        	users.push(user_node.attributes['title'].value)
+	end
       end
     end
 

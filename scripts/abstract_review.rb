@@ -43,10 +43,8 @@ class AbstractReview
       item[:body] = '' unless item[:body]
       hash = Digest::SHA1.hexdigest(item[:user] + item[:body])
       if Reviews.filter(:hash => hash).count == 0
-        matched = item[:star].match(/\d/)
-        star = matched[0].to_i
         Reviews.create(
-          :star => star,
+          :star => item[:star],
           :user => item[:user],
           :date => item[:date],
           :title => item[:title],

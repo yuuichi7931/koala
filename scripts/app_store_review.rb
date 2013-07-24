@@ -55,7 +55,7 @@ class AppStoreReview < AbstractReview
 
     stars = []
     doc.xpath('.//itms:HBoxView[@topInset="1"]', ns).each do |elm|
-      stars.push elm.values[1]
+      stars.push elm.values[1].gsub(/ stars*/,"")
     end
 
     bodies = []

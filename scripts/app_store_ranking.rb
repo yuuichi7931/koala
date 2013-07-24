@@ -20,6 +20,7 @@ class AppStoreRanking < AbstractRanking
     opt[:store_type] = STORE_TYPE
 
     url = get_ranking_url(opt)
+    puts "GET: " + url
 
     xml = open(url).read
     rankings = parse_rankings(xml)
@@ -80,7 +81,6 @@ class AppStoreRanking < AbstractRanking
       "atom" => "http://www.w3.org/2005/Atom",
       "im" => "http://itunes.apple.com/rss"
     }
-
     apps = []
     rank = 1
     document.xpath('.//atom:entry', ns).each do |elm|
@@ -93,7 +93,7 @@ class AppStoreRanking < AbstractRanking
       app["name"]       = elm.xpath('.//im:name',ns)[0].content
       app["genre"]      = elm.xpath('.//atom:category',ns)[0]["label"]
       app["developer"]  = elm.xpath('.//im:artist',ns)[0].content
-      app["price"]      = elm.xpath('.//im:price',ns)[0].content
+      app["price"]      = elm.xpath('.//im:price',ns)[0]["amount"]
       app["url"]        = elm.xpath('.//atom:link',ns)[0]["href"]
       app["thumbnail"]  = elm.xpath('.//im:image[@height="100"]',ns)[0].content
       app["rank"]       = rank

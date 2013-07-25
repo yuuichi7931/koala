@@ -13,7 +13,7 @@ class AppStoreReviewTest < Test::Unit::TestCase
     f = open(File.dirname(__FILE__) + '/reviews/app_store.txt')
     data = Nokogiri::XML(f.read)
     reviews = @obj.get_reviews(data, '333903271')
-    expect = {:star=>"3 stars",
+    expect = {:star=>"3",
       :user=>"4268428",
       :date=>"11-May-2012",
       :title=>"落ちる",

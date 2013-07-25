@@ -8,6 +8,7 @@ class RankingApps < Sequel::Model
       string :app_id
       string :name
       string :url
+      string :price
       string :developer
       string :thumbnail
       string :genre

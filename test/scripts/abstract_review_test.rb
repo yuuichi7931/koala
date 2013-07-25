@@ -22,7 +22,7 @@ class AbstractReviewTest < Test::Unit::TestCase
 
   def test_insert_reviews
     item = {
-      :star => '3 stars',
+      :star => '3',
       :user => 'ユーザー',
       :date => '2012/5/10',
       :title => 'タイトル',

@@ -26,37 +26,34 @@ class GooglePlayReview < AbstractReview
     devices = []
     i = 0
 
-    doc = Nokogiri.HTML(html)
-
-    doc.xpath("//div[@class='doc-review']").each do |node|
-      node.xpath(".//h4[@class='review-title']").each do |title_node|
+    doc = Nokogiri.HTML(html,nil,"UTF-8")
+    doc.xpath("//div[@class='single-review']").each do |node|
+      node.xpath(".//span[@class='review-title']").each do |title_node|
         titles.push(title_node.text)
       end
 
-      body_node = node.xpath(".//p[@class='review-text']")
-      if 0<body_node.count
-        body_node.each do |body_node|
-          bodies.push(body_node.text)
-        end
+      body_node = node.xpath(".//div[@class='review-body']")
+      if 0 < body_node.count
+      	bodies.push(body_node.text)
       else
         bodies.push("")
       end
 
-      node.xpath(".//span[@class='doc-review-date']").each do |date_node|
-        dates.push(date_node.text.sub(' - ', ''))
+      node.xpath(".//span[@class='review-date']").each do |date_node|
+        dates.push(date_node.text)
       end
 
-      node.xpath(".//div[@class='ratings goog-inline-block']").each do |star_node|
-        stars.push(star_node.attributes['title'].value)
+      node.xpath(".//div[@class='current-rating']").each do |star_node|
+        if md = star_node.attributes['style'].value.match("width: ([0-9]+)")
+	star  = md[1].to_i / 20
+        stars.push(star)
+	end 
       end
 
-      node.xpath("//strong").each do |user_node|
-        users.push(user_node.text)
-      end
-
-      node.xpath("//div[@class='doc-review']").each do |info_node|
-        versions.push(get_version(info_node.inner_html))
-        devices.push(get_device(info_node.inner_html))
+      node.xpath("//a[@class='no-nav g-hovercard']").each do |user_node|
+	if user_node.attributes['title']
+        	users.push(user_node.attributes['title'].value)
+	end
       end
     end
 
@@ -87,7 +84,7 @@ class GooglePlayReview < AbstractReview
       path = "/store/getreviews"
       data = "id=#{app_id}&reviewSortOrder=0&reviewType=1&pageNum=#{page}"
         response = http.post(path, data)
-      html_string = JSON.parse(response.body.split("\n")[1])['htmlContent']
+      html_string = JSON.parse(response.body.gsub(/\)\]\}\'/,""))[0][2]
       reviews = get_reviews(html_string, app_id)
       insert_reviews(reviews)
     end

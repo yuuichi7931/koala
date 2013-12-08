@@ -57,7 +57,6 @@ body {
 }
 
 .float-menu {
-    position:fixed;
     top:70px;
     left:30;
     z-index:1;

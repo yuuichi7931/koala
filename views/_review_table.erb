@@ -2,6 +2,7 @@
   <h4>レビュー</h4>
 
   <% if 0 < reviews.count %>
+    <%= partial(:_review_pagination) %>
     <table class="table table-bordered table-striped" id="reviews">
       <thead>
         <tr>
@@ -29,5 +30,6 @@
         <% end %>
       </tbody>
     </table>
+    <%= partial(:_review_pagination, :pages => @pages, :current_page => @current_page) %>
   <% end %>
 </div>

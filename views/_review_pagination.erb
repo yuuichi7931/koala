@@ -1,0 +1,11 @@
+<ul class="pagination">
+  <li><a href="#">&laquo;</a></li>
+  <% @pages.each do |page| %>
+    <% if page==@current_page.to_i %>
+      <li class="active"><a href="<%= @pagination_base_url %><%= page %>"><%= page %><span class="sr-only">(current)</span></a></li>
+    <% else %>
+    <li><a href="<%= @pagination_base_url %><%= page %>"><%= page %></a></li>
+    <% end %>
+  <% end %>
+  <li><a href="#">&raquo;</a></li>
+</ul>

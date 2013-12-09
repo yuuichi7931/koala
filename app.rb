@@ -22,6 +22,12 @@ end
 
 get '/' do
   @app  = nil
+  limit = 100
+  @current_page = 1
+  if params[:page]
+    @current_page = params[:page].to_i
+  end
+  offset = (@current_page - 1) * limit
 
   if params[:app_id]
     @app = Apps.filter(:app_id => params[:app_id]).first
@@ -31,10 +37,12 @@ get '/' do
 
   if @app
     @versions = Reviews.versions(@app[:app_id]).sort_by{|val| -val[:version].to_f}
+    @pagination_base_url = "?app_id=" + app.app_id + "&page="
     if params[:version] && params[:version]!='ALL'
       @version = params[:version].to_s
       @reviews = Reviews.filter(:app_id => @app[:app_id], :version => params[:version])
     elsif params[:version] && params[:version]=='ALL'
+      @version = params[:version].to_s
       @reviews = Reviews.filter(:app_id => @app[:app_id])
     elsif @versions != nil && 0 < @versions.length
       @version = @versions.first[:version]
@@ -42,6 +50,17 @@ get '/' do
     else
       @reviews = Reviews.filter(:app_id => @app[:app_id])
     end
+
+    count = @reviews.count
+    page_size = (0 < count) ? (count.to_f / limit.to_f).ceil : 1
+    @pages = Array.new(page_size){|index| index + 1}
+    if @version
+      @pagination_base_url = "?app_id=" + app.app_id + "&version=" + @version + "&page="
+    else
+      @pagination_base_url = "?app_id=" + app.app_id + "&page="
+    end
+
+    @reviews = @reviews.limit(limit, offset)
     @keywords = _get_keywords(@reviews)
     @stars = _get_star_count(@reviews)
   else

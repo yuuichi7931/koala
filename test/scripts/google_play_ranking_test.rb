@@ -16,23 +16,13 @@ class GooglePlayRankingTest < Test::Unit::TestCase
     records = @obj.get_ranking(data, opt)
 
     expect = {"store_type"=>1,
-      "rank"=>"9",
-      "app_id"=>"jp.co.mcdonalds.android",
-      "url"=> "https://play.google.com/store/apps/details?id=jp.co.mcdonalds.android&feature=apps_topselling_free",
-      "thumbnail"=> "https://lh3.ggpht.com/kxjCwlsfs-lcTh1kJw4ociNTX1EEa80NDpdYnL_lzfwRiIF1TbH9yA78BhBplPm6Pd4=w78-h78",
-      "developer"=>"日本マクドナルド株式会社",
-      "name"=>"マクドナルド公式アプリ",
-      "price"=>"無料",
-      "rating"=>"評価: 星 3.6 個（良い）"}
-    expect = {"store_type"=>1,
       "rank"=>9,
-      "app_id"=>"jp.naver.SJLINEPANG",
-      "url"=>"https://play.google.com/store/apps/details?id=jp.naver.SJLINEPANG",
-      "thumbnail"=>
-    "https://lh3.ggpht.com/qy40qQUSRMgNNkISVtr_neCP-ydrsDYT5ek0f5gWY6tvb7rxCZLeeVUZhx5HZjChvTM=w170",
-      "developer"=>"LINE Corporation",
-      "name"=>" LINE POP  ",
-      "rating"=>3.61,
+      "app_id"=>"jp.co.yahoo.android.yjtop",
+      "url"=> "https://play.google.com/store/apps/details?id=jp.co.yahoo.android.yjtop",
+      "thumbnail"=> "https://lh5.ggpht.com/hDO1Bl22b3qn98cZyzJvcFxysiiLrwC4ps_FlKNDIVQofEtyCCN2UqK-__YF3duOyjc=w170",
+      "developer"=>"Yahoo Japan Corp.",
+      "name"=>"   Yahoo! JAPAN   ",
+      "rating"=>4.12,
       "price"=>"無料"}
 
     assert_equal(60, records.size)
@@ -46,25 +36,14 @@ class GooglePlayRankingTest < Test::Unit::TestCase
     records = @obj.get_ranking(data, opt)
 
     expect = {"store_type"=>1,
-      "rank"=>"33",
-      "app_id"=>"jp.dxumi",
-      "url"=> "https://play.google.com/store/apps/details?id=jp.dxumi&feature=apps_topselling_new_paid",
-      "thumbnail"=> "https://lh6.ggpht.com/81c6gcJrJeLXklCEhYo5U1yfg7sCC9v0eAMFBxGjaMV69sbUxVdP9czXBwV5-VNh2nll=w78-h78",
-      "developer"=>"sanyohanbai co.,ltd",
-      "name"=>"CRデラックス海物語",
-      "rating"=>"評価: 星 3.8 個（良い）",
-      "price"=>"￥1,300"}
-    expect = {"store_type"=>1,
       "rank"=>9,
-      "app_id"=>"net.kairosoft.android.noujou_ja",
-      "url"=>
-        "https://play.google.com/store/apps/details?id=net.kairosoft.android.noujou_ja",
-      "thumbnail"=>
-        "https://lh3.ggpht.com/-Lw2bRG72izB-f5vhBJLK4SZWX5WLS2BvqPzDAPu3NPIrAskVXfmU9IuYe213cb7oas=w170",
-      "developer"=>"Kairosoft Co.,Ltd",
-      "name"=>" 大空ヘクタール農園  ",
-      "rating"=>4.75,
-      "price"=>"￥450"}
+      "app_id"=>"com.square_enix.android_googleplay.dq8j",
+      "url"=> "https://play.google.com/store/apps/details?id=com.square_enix.android_googleplay.dq8j",
+      "thumbnail"=> "https://lh5.ggpht.com/fbk12U4BDy2TfC_biaojagY-x4TpmifO-napNG-RzWxELQpMigBRlaJ-dkQxjVp8ANkn=w170",
+      "developer"=>"SQUARE ENIX Co.,Ltd.",
+      "name"=>"   ドラゴンクエストVIII 空と海と大地と呪われし姫君   ",
+      "rating"=>4.33,
+      "price"=>"￥2,800"}
 
     assert_equal(60, records.size)
     assert_equal(expect, records[8])

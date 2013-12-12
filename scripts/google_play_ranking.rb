@@ -113,7 +113,7 @@ class GooglePlayRanking < AbstractRanking
     begin
       doc = Nokogiri.HTML(html)
       i = 0
-      doc.xpath('//div[@class="card apps square-cover small no-rationale"]').each do |node|
+      doc.xpath('//div[@class="card no-rationale square-cover apps small"]').each do |node|
         i += 1
         opt[:page] = 0 unless opt[:page]
         opt[:rank] = i + (PAGING_SIZE * opt[:page].to_i)

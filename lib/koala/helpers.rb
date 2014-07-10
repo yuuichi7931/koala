@@ -70,6 +70,4 @@ module Koala
       return nil
     end
   end
-
-  helpers Helpers
 end

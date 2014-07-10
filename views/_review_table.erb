@@ -17,7 +17,7 @@
       </thead>
 
       <tbody>
-        <% reviews.order(:id.desc).each do |review| %>
+        <% reviews.order(:id).each do |review| %>
           <tr>
             <td><%= review[:id] %></td>
             <td><%= review[:star] %></td>

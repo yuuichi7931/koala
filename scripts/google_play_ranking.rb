@@ -134,13 +134,18 @@ class GooglePlayRanking < AbstractRanking
 
   def parse_ranking_app(node, opt)
       app = {}
-      app["store_type"] = STORE_TYPE
-      app["rank"]       = opt[:rank]
-      app["app_id"]     = node["data-docid"]
-      app["url"]        = opt[:base_url] + node.xpath(".//a")[0]["href"]
-      app["thumbnail"]  = node.xpath(".//img")[0]["src"]
-      app["developer"]  = node.xpath(".//a[@class='subtitle']")[0].content
-      app["name"]  = node.xpath(".//a[@class='title']")[0].content
+      begin
+        app["store_type"] = STORE_TYPE
+        app["rank"]       = opt[:rank]
+        app["app_id"]     = node["data-docid"]
+        app["url"]        = opt[:base_url] + node.xpath(".//a")[0]["href"]
+        app["thumbnail"]  = node.xpath(".//img")[0]["src"]
+        app["developer"]  = node.xpath(".//a[@class='subtitle']")[0].content
+        app["name"]  = node.xpath(".//a[@class='title']")[0].content
+        app["price"] = node.xpath(".//button[@class='price buy']").children[1].content
+      rescue  => error
+        p error
+      end
 
       if node.xpath(".//div[@class='current-rating']")[0]
         rating = node.xpath(".//div[@class='current-rating']")[0]["style"].sub('width: ','').sub('%;','').to_f
@@ -149,7 +154,6 @@ class GooglePlayRanking < AbstractRanking
         app["rating"] = ""
       end
 
-      app["price"] = node.xpath(".//span[@class='price buy']")[0].content.strip
       return app
   end
 

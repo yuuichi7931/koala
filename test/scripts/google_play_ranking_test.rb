@@ -17,12 +17,12 @@ class GooglePlayRankingTest < Test::Unit::TestCase
 
     expect = {"store_type"=>1,
       "rank"=>9,
-      "app_id"=>"jp.co.yahoo.android.yjtop",
-      "url"=> "https://play.google.com/store/apps/details?id=jp.co.yahoo.android.yjtop",
-      "thumbnail"=> "https://lh5.ggpht.com/hDO1Bl22b3qn98cZyzJvcFxysiiLrwC4ps_FlKNDIVQofEtyCCN2UqK-__YF3duOyjc=w170",
-      "developer"=>"Yahoo Japan Corp.",
-      "name"=>"   Yahoo! JAPAN   ",
-      "rating"=>4.12,
+      "app_id"=>"com.jp.ilovemusic",
+      "url"=> "https://play.google.com/store/apps/details?id=com.jp.ilovemusic",
+      "thumbnail"=> "https://lh5.ggpht.com/gTCVdPbzbWfdIfkfRQs5xnIjD7z9vvh8--ZleJE_loRkb2LIF9xGViDDYVzul9sOCbc=w170",
+      "developer"=>"iLoveMusic.inc",
+      "name"=>"   無料で音楽聴き放題!!-iLoveMusic-MP3連続再生   ",
+      "rating"=>4.3,
       "price"=>"無料"}
 
     assert_equal(60, records.size)
@@ -42,7 +42,7 @@ class GooglePlayRankingTest < Test::Unit::TestCase
       "thumbnail"=> "https://lh5.ggpht.com/fbk12U4BDy2TfC_biaojagY-x4TpmifO-napNG-RzWxELQpMigBRlaJ-dkQxjVp8ANkn=w170",
       "developer"=>"SQUARE ENIX Co.,Ltd.",
       "name"=>"   ドラゴンクエストVIII 空と海と大地と呪われし姫君   ",
-      "rating"=>4.33,
+      "rating"=>4.25,
       "price"=>"￥2,800"}
 
     assert_equal(60, records.size)

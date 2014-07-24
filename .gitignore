@@ -3,3 +3,4 @@ logs/*.log
 .bundle
 config/script_config.rb
 Gemfile.lock
+thin.yml

@@ -34,7 +34,7 @@ class GooglePlayReview < AbstractReview
 
       body_node = node.xpath(".//div[@class='review-body']")
       if 0 < body_node.count
-      	bodies.push(body_node.text)
+        bodies.push(body_node.text)
       else
         bodies.push("")
       end
@@ -45,15 +45,13 @@ class GooglePlayReview < AbstractReview
 
       node.xpath(".//div[@class='current-rating']").each do |star_node|
         if md = star_node.attributes['style'].value.match("width: ([0-9]+)")
-	star  = md[1].to_i / 20
-        stars.push(star)
-	end 
+          star  = md[1].to_i / 20
+          stars.push(star)
+        end 
       end
 
-      node.xpath("//a[@class='no-nav g-hovercard']").each do |user_node|
-	if user_node.attributes['title']
-        	users.push(user_node.attributes['title'].value)
-	end
+      node.xpath("//span[@class='author-name']").each do |user_node|
+        users.push(user_node.text.strip)
       end
     end
 

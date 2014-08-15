@@ -1,5 +1,6 @@
 *.db
 logs/*.log
+csv/*.csv
 .bundle
 config/script_config.rb
 Gemfile.lock

@@ -17,17 +17,18 @@ class AppReview
   def fetch
     Apps.all.each do |app|
       n = (Reviews.filter(:app_id => app[:app_id]).count==0)?10:2
-      fetch_reviews(app[:app_id].to_s, n)
+      fetch_reviews(app, n)
     end
   end
 
-  def fetch_reviews(app_id, pages)
-    if is_app_store_app(app_id)
+  def fetch_reviews(app, pages)
+    if is_app_store_app(app[:app_id])
       task = AppStoreReview.new
+      #task.fetch_reviews(app[:app_id], pages)
     else
-      task = GooglePlayReview.new
+      task = GooglePlayReview.new(app)
+      task.fetch_reviews
     end
-    task.fetch_reviews(app_id, pages)
   end
 
   def is_app_store_app(id)

@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'sequel'
 require 'test/unit'
+require 'mocha/test_unit'
 
 Sequel.connect('sqlite::memory:')
 

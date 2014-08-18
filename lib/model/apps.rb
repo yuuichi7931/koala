@@ -6,6 +6,7 @@ class Apps < Sequel::Model
       primary_key :id
       string :name
       string :app_id
+      string :bucket_id
       timestamp :created_at
       index [:name, :app_id]
     end

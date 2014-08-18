@@ -54,7 +54,7 @@ get '/' do
     page_size = (0 < count) ? (count.to_f / limit.to_f).ceil : 1
     @pages = Array.new(page_size){|index| index + 1}
     if @version
-      @pagination_base_url = "?app_id=" + @app.app_id.to_s + "&version=" + @version + "&page="
+      @pagination_base_url = "?app_id=" + @app.app_id.to_s + "&version=" + @version.to_s + "&page="
     else
       @pagination_base_url = "?app_id=" + @app.app_id.to_s + "&page="
     end
@@ -71,12 +71,21 @@ end
 
 post '/app/create' do
   begin
-  app = Apps.create(:app_id =>  params[:app_id],
-                    :name => params[:app_name],
-                    :created_at => Time.now)
-  'ok'
+    app = Apps.filter(:app_id => params[:app_id]).first
+    if app
+       app.update(
+        :name => params[:app_name],
+        :bucket_id => params[:bucket_id]
+      )
+      return 'ok' 
+    end
+
+    app = Apps.create(:app_id =>  params[:app_id],
+                      :name => params[:app_name],
+                      :bucket_id => params[:bucket_id],
+                      :created_at => Time.now)
+    return 'ok'
   rescue => exception
-    log.debug(exception)
     halt 403, "bad parameters"
   end
 end
@@ -129,12 +138,12 @@ get '/ranking' do
   total_count = 0
   @records.each do | record |
     next unless record[:genre]
-    if @genres[record[:genre]]
-      @genres[record[:genre]] += 1
-    else
-      @genres[record[:genre]] = 1
-    end
-    total_count += 1
+  if @genres[record[:genre]]
+    @genres[record[:genre]] += 1
+  else
+    @genres[record[:genre]] = 1
+  end
+  total_count += 1
   end
 
   erb :ranking
@@ -159,12 +168,12 @@ get '/ranking/new' do
   total_count = 0
   @records.each do | record |
     next unless record[:genre]
-    if @genres[record[:genre]]
-      @genres[record[:genre]] += 1
-    else
-      @genres[record[:genre]] = 1
-    end
-    total_count += 1
+  if @genres[record[:genre]]
+    @genres[record[:genre]] += 1
+  else
+    @genres[record[:genre]] = 1
+  end
+  total_count += 1
   end
 
   erb :ranking

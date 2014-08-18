@@ -9,5 +9,6 @@ class ScriptConfig
     'com.exapmle'=>'test_room'
   }
 
+  GS_COMMAND = '/path/to/gsutil'
   ADMIN_EMAIL = 'admin@example.com'
 end

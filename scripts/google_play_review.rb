@@ -6,129 +6,66 @@ require 'open-uri'
 require 'json'
 require 'net/http'
 require 'net/https'
+require "csv"
 
 $LOAD_PATH << File.dirname(__FILE__)
 require 'abstract_review'
 
 class GooglePlayReview < AbstractReview
+  CSV_DIR = File.dirname(__FILE__) + '/../csv'
 
-  def initialize
-    super
+  def initialize(app)
+    @app = app
   end
 
-  def get_reviews(html, app_id)
-    dates = []
-    titles = []
-    bodies = []
-    stars = []
-    users = []
-    versions = []
-    devices = []
-    i = 0
+  def fetch_reviews
+    csv = _get_csv_name
+    result = _copy_csv(csv)
+    return if result == -1
 
-    doc = Nokogiri.HTML(html,nil,"UTF-8")
-    doc.xpath("//div[@class='single-review']").each do |node|
-      node.xpath(".//span[@class='review-title']").each do |title_node|
-        titles.push(title_node.text)
-      end
+    reviews = _parse_csv(csv)
+    insert_reviews(reviews)
+  end
 
-      body_node = node.xpath(".//div[@class='review-body']")
-      if 0 < body_node.count
-        bodies.push(body_node.text)
-      else
-        bodies.push("")
-      end
+  def _get_csv_name
+    ym = Time.now.strftime("%Y%m")
+    csv = "reviews_#{@app[:app_id]}_#{ym}.csv"
+    return csv
+  end
 
-      node.xpath(".//span[@class='review-date']").each do |date_node|
-        dates.push(date_node.text)
-      end
+  def _get_csv_path(csv)
+    csv_path = CSV_DIR + '/' + csv
+  end
 
-      node.xpath(".//div[@class='current-rating']").each do |star_node|
-        if md = star_node.attributes['style'].value.match("width: ([0-9]+)")
-          star  = md[1].to_i / 20
-          stars.push(star)
-        end 
-      end
+  def _copy_csv(csv)
+    return -1 unless ScriptConfig::GS_COMMAND
+    return -1 unless @app[:bucket_id]
 
-      node.xpath("//span[@class='author-name']").each do |user_node|
-        users.push(user_node.text.strip)
-      end
-    end
+    cmd = ScriptConfig::GS_COMMAND
+    bucket_id = @app[:bucket_id]
+    value = `#{cmd} cp gs://#{bucket_id}/reviews/#{csv} #{CSV_DIR}`
+    return -1 if $? 
+    return 1
+  end
 
-    items = [];
-    count = stars.size - 1
-    (0..count).each do |key|
-      item = {
-        :star => stars[key],
-        :user => users[key],
-        :date => dates[key],
-        :title => titles[key],
-        :body => bodies[key],
-        :version => versions[key],
-        :device => devices[key],
-        :app_id => app_id
+  def _parse_csv(csv)
+    csv_path = _get_csv_path(csv)
+    utf16 = open(csv_path, "rb:BOM|UTF-16"){|f| f.read }
+    utf8 = utf16.encode("UTF-8")
+    reviews = []
+    CSV.parse(utf8, col_sep: ",", row_sep: "\n", headers: :first_row) do |row|
+      next if row["Review Title"]==nil && row["Review Text"]==nil
+      review = {
+        :star => row["Star Rating"],
+        :date => Time.at(row["Review Submit Millis Since Epoch"].to_f / 1000.0),
+        :title => row["Review Title"],
+        :body => row["Review Text"],
+        :version => row["App Version"],
+        :device => row["Reviewer Hardware Model"],
+        :app_id => @app[:app_id]
       }
-      items.push(item)
+      reviews.push review
     end
-    return items
-  end
-
-  def fetch_reviews(app_id, pages)
-    (0..pages).each do |page|
-      puts "processing ID:#{app_id} #{(page+1).to_s}/#{(pages+1).to_s}...\n"
-
-        http = Net::HTTP.new('play.google.com', 443)
-      http.use_ssl = true
-      path = "/store/getreviews"
-      data = "id=#{app_id}&reviewSortOrder=0&reviewType=1&pageNum=#{page}"
-        response = http.post(path, data)
-      html_string = JSON.parse(response.body.gsub(/\)\]\}\'/,""))[0][2]
-      reviews = get_reviews(html_string, app_id)
-      insert_reviews(reviews)
-    end
-  end
-
-  def get_version(text)
-    version = nil
-    if /、バージョン ([0-9\.]+)/ =~ text
-      version = $1
-    end
-
-    version = get_version_with_parenthese(text) unless version
-    version = get_version_without_device(text) unless version
-    return version
-  end
-
-  def get_version_with_parenthese(text)
-    version = nil
-    if /（([^）]+)、バージョン ([^）]+)）/ =~ text
-      version = $2
-    end
-    return version
-  end
-
-  def get_version_without_device(text)
-    version = nil
-    if /バージョン ([0-9\.]+)<span/ =~ text
-      version = $1
-    end
-    return version
-  end
-
-  def get_device(text)
-    device = nil
-    if /- ([A-Za-z].+)、バージョン/ =~ text
-      device = $1
-    end
-    return get_device_with_parenthese(text) unless device
-    return device
-  end
-
-  def get_device_with_parenthese(text)
-    device = nil
-    if /（([^）]+)、バージョン (.+)）/ =~ text
-      device = $1
-    end
-    return device
+    return reviews
   end
 end

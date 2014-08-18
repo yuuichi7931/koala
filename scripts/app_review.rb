@@ -24,7 +24,7 @@ class AppReview
   def fetch_reviews(app, pages)
     if is_app_store_app(app[:app_id])
       task = AppStoreReview.new
-      #task.fetch_reviews(app[:app_id], pages)
+      task.fetch_reviews(app[:app_id], pages)
     else
       task = GooglePlayReview.new(app)
       task.fetch_reviews

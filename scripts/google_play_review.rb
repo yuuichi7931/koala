@@ -44,8 +44,8 @@ class GooglePlayReview < AbstractReview
     cmd = ScriptConfig::GS_COMMAND
     bucket_id = @app[:bucket_id]
     value = `#{cmd} cp gs://#{bucket_id}/reviews/#{csv} #{CSV_DIR}`
-    return -1 if $? 
-    return 1
+    return 1 if $?.exited?
+    return -1 
   end
 
   def _parse_csv(csv)

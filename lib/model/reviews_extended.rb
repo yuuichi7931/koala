@@ -6,7 +6,7 @@ class Reviews
   def after_create
     if ScriptConfig::NOTIFY_ROOMS[self.app_id]
       room = ScriptConfig::NOTIFY_ROOMS[self.app_id]
-      message = "[Ver.#{self.version} ★#{self.star.to_s}] #{self.title} - #{self.body} (#{self.date} #{self.device})"
+      message = "> [#{self.app_id} Ver.#{self.version} ★#{self.star.to_s}] #{self.title} - #{self.body} (#{self.date} #{self.device})"
       message.gsub!('<br />', ' ')
 
       escaped_message = CGI.escape(message)

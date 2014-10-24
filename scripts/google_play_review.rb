@@ -60,8 +60,8 @@ class GooglePlayReview < AbstractReview
         :date => Time.at(row["Review Submit Millis Since Epoch"].to_f / 1000.0),
         :title => row["Review Title"],
         :body => row["Review Text"],
-        :version => row["App Version"],
-        :device => row["Reviewer Hardware Model"],
+        :version => row["App Version Code"],
+        :device => row["Device"],
         :app_id => @app[:app_id]
       }
       reviews.push review

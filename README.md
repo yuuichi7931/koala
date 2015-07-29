@@ -1,15 +1,49 @@
 koala
 =============
 
+AppStoreのレビューをスクレイピングしてDBに保存したり表示したりするツールです。
+Sinatraベースです。
 
-Function
+機能
+-------
+* 登録したアプリのレビューをAppStoreからスクレイピングしてsqlite3なDBに保存
+* 保存したレビューの一覧表示
+* ★の数を集計してグラフ表示
+* 頻出キーワードを抽出表示(mecab-rubyインストールしてれば)
+* 頻出キーワードを抽出表示(mecab-rubyインストールしてれば)
+* 新しいレビューをwebhook的なのでで投稿
+
+キーワードの抽出について
 -------
 
-Depends on
+mecab-rubyは0.98のみの対応ですが、インストールしてあると頻出キーワードの一覧とか出せます。
+mecab-rubyは無くても他の機能は動作するはずです。
+
+使い方
 -------
 
-Usage
--------
+    $ bundle install
+
+と実行すれば依存ライブラリ(mecab-ruby以外)がインストールされます。  
+その後、以下のコマンドで起動します
+
+    $ ruby app.rb
+
+http://localhost:4567 にアクセスして、左メニューからアプリを登録します。
+APP IDはAppStoreとかGooglePlayのURLに含まれているアプリID(twitterのiOSアプリであれば333903271、GooglePlayだとcom.twitter.android)で、
+
+APP NAMEは何でもいいです。
+
+hubotとかでhttp経由のリクエスト飛ばしてIRCに投稿とかしたい場合は、config/script_config_sample.rbを参考にconfig/script_config.rbを作成して設定を記述すれば、httpでGETリクエストを送る事も出来ます。わかりずらくてすいません。ここらへんは思いつきで実装してるので、その内変わると思います。
+
+httpdでhubotに投稿してもらうサンプルはこちらです
+https://github.com/punchdrunker/httpd-ircbot
+
+アプリを登録したら以下のコマンドでレビューを収集します
+
+    $ ruby scripts/fetch.rb
+
+終了後、再度http://localhost:4567にアクセスすると、レビューの一覧が表示されます
 
 License
 -------

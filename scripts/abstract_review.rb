@@ -11,7 +11,7 @@ class AbstractReview
 
   def get_nodes(text)
     begin
-      require 'MeCab'
+      require 'mecab'
     rescue LoadError
       return nil
     end

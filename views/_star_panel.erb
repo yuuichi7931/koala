@@ -10,7 +10,11 @@
       </div>
 
       <div class="span7">
+        <% if @version %>
         <h4><%= @version %>のレビュー評価</h4>
+        <% else %>
+        <h4>全てのバージョンのレビュー評価</h4>
+        <% end %>
         <table class="table table-bordered">
           <tbody>
             <tr>

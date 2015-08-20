@@ -10,4 +10,5 @@ gem 'sinatra-sequel'
 gem 'mocha'
 gem 'thin'
 gem 'rake'
-gem 'mecab'
+# mecabを利用する場合はインストール
+#gem 'mecab'

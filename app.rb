@@ -292,7 +292,7 @@ def _get_genre_name(genre_id)
 end
 
 def _set_pagination_info(app_id, version=nil)
-  limit = 10
+  limit = 100
   @current_page = 1
   if params[:page]
     @current_page = params[:page].to_i

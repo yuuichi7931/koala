@@ -7,6 +7,10 @@ class Reviews
     if ScriptConfig::NOTIFY_ROOMS[self.app_id]
       room = ScriptConfig::NOTIFY_ROOMS[self.app_id]
       message = "> [#{self.app_id} Ver.#{self.version} ★#{self.star.to_s}] #{self.title} - #{self.body} (#{self.date} #{self.device})"
+
+      additional_message = ScriptConfig::NOTIFY_ADDITIONAL_MESSAGE[self.app_id]
+      message = "> [#{self.app_id} Ver.#{self.version} ★#{self.star.to_s}] #{self.title} - #{self.body} (#{self.date} #{self.device}) #{additional_message}"
+      
       message.gsub!('<br />', ' ')
 
       escaped_message = CGI.escape(message)

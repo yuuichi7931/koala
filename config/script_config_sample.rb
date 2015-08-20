@@ -9,6 +9,10 @@ class ScriptConfig
     'com.exapmle'=>'test_room'
   }
 
+  NOTIFY_ADDITIONAL_MESSAGE = {
+    'com.exapmle'=>'http://example.com/app/com.exapmle'
+  }
+
   GS_COMMAND = '/path/to/gsutil'
   ADMIN_EMAIL = 'admin@example.com'
 end

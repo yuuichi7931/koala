@@ -16,7 +16,12 @@ class AppTest < Test::Unit::TestCase
   end
 
   def test_app_id
-    get '/', :app_id => 123
+    get '/app/123'
+    assert_equal 200, last_response.status
+  end
+
+  def test_app_id_with_version
+    get '/app/123/1.2.1'
     assert_equal 200, last_response.status
   end
 

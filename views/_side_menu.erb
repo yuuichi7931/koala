@@ -36,9 +36,9 @@
       <% if apps %>
         <% apps.each do |app| %>
            <% if selected_app && app[:app_id]==selected_app[:app_id] %>
-               <li class="active"><a href="/?app_id=<%= app[:app_id] %>"><%= app[:name] %></a></li>
+               <li class="active"><a href="/app/<%= app[:app_id] %>"><%= app[:name] %></a></li>
            <% else %>
-               <li><a href="/?app_id=<%= app[:app_id] %>"><%= app[:name] %></a></li>
+               <li><a href="/app/<%= app[:app_id] %>"><%= app[:name] %></a></li>
            <% end %>
         <% end %>
       <% end %>

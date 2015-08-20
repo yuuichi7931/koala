@@ -1,7 +1,7 @@
 <form id="query-panel" action="" method="GET">
 <% if versions %>
     <strong>version:</strong>
-    <select name="version" class="span2" style="margin-top:6px" onchange="submit(this.form)">
+    <select name="version" class="span2" style="margin-top:6px">
       <option>ALL</option>
       <% versions.each do |v| %>
         <% if version %>
@@ -12,6 +12,12 @@
         <% end %>
       <% end %>
     </select>
-  <input type="hidden" name="app_id" value="<%= app_id %>" class="btn" />
+    <script type="text/javascript">
+      $('[name=version]').change(function() {
+          var val = $('[name=version]').val();
+          console.log(val);
+          location.href = "/app/<%= app_id %>/" + encodeURIComponent(val);
+          });
+    </script>
 <% end %>
 </form>

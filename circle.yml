@@ -1,0 +1,3 @@
+dependencies:
+  override:
+      - bash ./build/install-mecab.sh

@@ -1,15 +1,15 @@
 <% total_count = stars[4] + stars[3] + stars[2] + stars[1] + stars[0] %>
 <% if 0<total_count %>
 
-<div class="row-fluid">
+<div class="row placeholders">
     <div id="stars">
-      <div class="span5">
+      <div class="col-sm-8 col-md-6">
         <h4>評価分布</h4>
         <div id="evaluation_graph"></div>
         <div id="evaluation_graph_caption"></div>
       </div>
 
-      <div class="span7">
+      <div class="col-sm-8 col-md-6">
         <% if @version %>
         <h4><%= @version %>のレビュー評価</h4>
         <% else %>

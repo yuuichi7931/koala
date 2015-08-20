@@ -1,4 +1,4 @@
-source :rubygems
+source "https://rubygems.org"
 
 gem 'json'
 gem 'nokogiri'
@@ -10,5 +10,5 @@ gem 'sinatra-sequel'
 gem 'mocha'
 gem 'thin'
 gem 'rake'
-# mecabを利用する場合はインストール
-#gem 'mecab'
+# mecabを利用しない場合はコメントアウト
+gem 'mecab'

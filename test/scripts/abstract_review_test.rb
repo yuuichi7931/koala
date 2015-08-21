@@ -12,7 +12,7 @@ class AbstractReviewTest < Test::Unit::TestCase
 
   def test_get_nodes
     begin
-      require 'MeCab'
+      require 'mecab'
       expect = '私,名前,中野'
     rescue LoadError
       expect = nil

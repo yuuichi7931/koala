@@ -1,0 +1,9 @@
+machine:
+  ruby:
+      version: 2.1.5
+
+dependencies:
+  override:
+      - bash ./build/install-mecab.sh
+      - bundle install:
+          timeout: 240

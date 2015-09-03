@@ -10,5 +10,6 @@ gem 'sinatra-sequel'
 gem 'mocha'
 gem 'thin'
 gem 'rake'
+gem 'rspec'
 # mecabを利用しない場合はコメントアウト
 gem 'mecab'

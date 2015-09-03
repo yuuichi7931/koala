@@ -10,6 +10,14 @@ class AppTest < Test::Unit::TestCase
     assert_equal '2012/03/03', formatted_date('2012/03/03 12:33:22')
   end
 
+  def test_formatted_date_with_tz
+    assert_equal '2015/08/11', formatted_date('2015-08-11 01:14:08 +0900')
+  end
+
+  def test_formatted_date_apple
+    assert_equal '2015/08/06', formatted_date('Aug06,2015')
+  end
+
   def test_formatted_rate
     assert_equal '2.0', formatted_rate('aaa2.0bjeiwahf')
   end

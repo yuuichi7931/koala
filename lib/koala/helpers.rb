@@ -11,8 +11,12 @@ module Koala
     def formatted_date(date_string, delimiter='/')
       date_string = date_string.to_s
       return '' if date_string == ''
-      date = Time.parse(date_string)
-      date.strftime("%Y#{delimiter}%m#{delimiter}%d")
+      begin
+        date = Time.parse(date_string)
+        date.strftime("%Y#{delimiter}%m#{delimiter}%d")
+      rescue => e
+        return date_string
+      end
     end
 
     def formatted_rate(str)

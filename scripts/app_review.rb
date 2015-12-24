@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 require 'rubygems'
+require 'kansou'
 
 $LOAD_PATH << File.dirname(__FILE__)
 $LOAD_PATH << File.dirname(__FILE__) + '/../config'
@@ -26,8 +27,8 @@ class AppReview
       task = AppStoreReview.new
       task.fetch_reviews(app[:app_id].to_s, pages)
     else
-      task = GooglePlayReview.new(app)
-      task.fetch_reviews
+      task = GooglePlayReview.new
+      task.fetch_reviews(app[:app_id].to_s, pages)
     end
   end
 

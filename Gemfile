@@ -12,6 +12,6 @@ gem 'thin'
 gem 'rake'
 gem 'rspec'
 gem 'test-unit'
-gem "kansou", "0.2.1"
+gem "kansou", "0.2.2"
 # mecabを利用しない場合はコメントアウト
 gem 'mecab'
